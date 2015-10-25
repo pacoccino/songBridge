@@ -1,0 +1,15 @@
+<sidemenu title="Applications" list="list1" on-select="selectConnector(selection)"></sidemenu>
+
+<div flex layout="column" tabIndex="-1" role="main" class="md-whiteframe-z2">
+
+    <md-toolbar layout="row" class="md-whiteframe-z1">
+        <md-button class="menu" hide-gt-sm ng-click="toggleList()" aria-label="Show User List">
+            <md-icon md-svg-icon="menu" ></md-icon>
+        </md-button>
+
+        <h1>Connector informations</h1>
+    </md-toolbar>
+    <content connector="connector"></content>
+</div>
+
+<!--<sidemenu title="Right menu" list="list2"></sidemenu>-->

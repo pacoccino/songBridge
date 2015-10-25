@@ -1,26 +1,29 @@
-angular.module('App')
-.directive('sidemenu', function() {
-  var nbMenu = 0;
-  return {
-        restrict: 'E',
-        templateUrl: "src/directives/sidemenu/sidemenu.html",
-        scope: {
-          list: '=',
-          title: '@'
-        },
-        link: function (scope, element) {
+app.directive('sidemenu', function() {
+        var nbMenu = 0;
 
-          scope.menuId = nbMenu;
-          nbMenu++;
+        return {
+            restrict: 'E',
+            templateUrl: "src/directives/sidemenu/sidemenu.html",
+            scope: {
+                list: '=',
+                title: '@',
+                onSelect:'&'
+            },
+            link: function (scope, element) {
 
-          scope.menuPosition = 'left';
-          scope.selected = null;
+                scope.menuId = nbMenu;
+                nbMenu++;
 
-          scope.select = function(element) {
-            scope.selected = element;
-          };
+                scope.menuPosition = 'left';
+                scope.selected = null;
 
-        }
-      };
+                scope.select = function(element) {
+                    scope.selected = scope.list.indexOf(element);
+
+                    scope.onSelect({selection: element})
+                };
+
+            }
+        };
     }
 );

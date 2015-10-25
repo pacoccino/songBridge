@@ -16,37 +16,20 @@
   <script src="./bower_components/angular-animate/angular-animate.js"></script>
   <script src="./bower_components/angular-aria/angular-aria.js"></script>
   <script src="./bower_components/angular-route/angular-route.js"></script>
+  <script src="./bower_components/angular-cookies/angular-cookies.js"></script>
   <script src="./bower_components/lodash/lodash.min.js"></script>
   <script type="text/javascript" src="./bower_components/angular-material/angular-material.js"></script>
 
   <script src="./src/app.js"></script>
+  <script src="./src/views/main/MainController.js"></script>
   <script src="./src/directives/sidemenu/sidemenu.js"></script>
   <script src="./src/directives/content/content.js"></script>
   <script src="./src/directives/login/login.js"></script>
   <script src="./src/services/spotify.js"></script>
-  <script src="./src/controllers/Controller.js"></script>
-  <script src="./src/controllers/authCtrl.js"></script>
+  <script src="./src/services/deezer.js"></script>
 </head>
 
-<body ng-app="App" layout="row" ng-controller="Controller as ul">
-
-    <sidemenu title="Left menu" list="ul.list1"></sidemenu>
-
-    <div flex layout="column" tabIndex="-1" role="main" class="md-whiteframe-z2">
-
-      <md-toolbar layout="row" class="md-whiteframe-z1">
-        <md-button class="menu" hide-gt-sm ng-click="ul.toggleList()" aria-label="Show User List">
-          <md-icon md-svg-icon="menu" ></md-icon>
-        </md-button>
-        <h1>Double menu MD layout</h1>
-      </md-toolbar>
-
-      <login ng-if="!ul.logged"></login>
-      <div ng-view></div>
-
-    </div>
-
-    <sidemenu title="Right menu" list="ul.list2"></sidemenu>
-
+<body ng-app="App">
+  <div ng-view layout="row" class="main-view"></div>
 </body>
 </html>

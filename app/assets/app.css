@@ -1,9 +1,12 @@
 html, body {
   font-family: 'Roboto', sans-serif;
   font-size:14px;
-  height:100%;
   margin: 0px;
   padding: 0px;
+}
+
+.main-view {
+  height:100%;
 }
 
 /* Toolbar area */

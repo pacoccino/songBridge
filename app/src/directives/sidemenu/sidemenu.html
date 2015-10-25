@@ -9,7 +9,7 @@
 
   <md-list>
     <md-list-item ng-repeat="element in list">
-      <md-button ng-click="select(element)" ng-class="{'selected' : element._id === selected._id }">
+      <md-button ng-click="select(element)" ng-class="{'selected' : $index === selected }">
         <md-icon md-svg-icon="svg-2" class="avatar"></md-icon>
         {{element.name}}
       </md-button>
