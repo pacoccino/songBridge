@@ -19,5 +19,8 @@
   "scripts": {
     "postinstall": "bower update",
     "prestart": "npm update"
+  },
+  "dependencies": {
+    "mongoose": "^4.2.2"
   }
 }
