@@ -9,9 +9,8 @@
 
 var express = require('express'); // Express web server framework
 var request = require('request'); // "Request"
-var querystring = require('querystring'); // "Request"
 
-var Helpers = require('./../modules/helpers');
+var Connectors = require('./../connectors/connectors');
 
 var ApiRouter = express.Router({ params: 'inherit' });
 var AuthRouter = require('./auth');
@@ -19,7 +18,17 @@ var LibRouter = require('./library');
 
 ApiRouter.get('/', function(req,res) {res.send('api ok')});
 ApiRouter.use('/auth', AuthRouter);
-ApiRouter.use('/library', LibRouter);;
+ApiRouter.use('/library', LibRouter);
+
+ApiRouter.get('/connectors', function(req, res) {
+    var connectors = [];
+
+    Connectors.forEach(function(connector) {
+        connectors.push(connector.infos);
+    });
+
+    res.json(connectors);
+});
 
 
 module.exports = ApiRouter;
