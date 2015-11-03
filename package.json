@@ -21,6 +21,7 @@
     "prestart": "npm update"
   },
   "dependencies": {
+    "lodash": "^3.10.1",
     "mongoose": "^4.2.2"
   }
 }

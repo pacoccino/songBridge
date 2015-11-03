@@ -13,6 +13,7 @@ var request = require('request'); // "Request"
 var Connectors = require('./../connectors/connectors');
 
 var ApiRouter = express.Router({ params: 'inherit' });
+
 var AuthRouter = require('./auth');
 var LibRouter = require('./library');
 
@@ -21,13 +22,8 @@ ApiRouter.use('/auth', AuthRouter);
 ApiRouter.use('/library', LibRouter);
 
 ApiRouter.get('/connectors', function(req, res) {
-    var connectors = [];
 
-    Connectors.forEach(function(connector) {
-        connectors.push(connector.infos);
-    });
-
-    res.json(connectors);
+    res.json(Connectors.getConnectorsList());
 });
 
 
