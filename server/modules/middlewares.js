@@ -41,7 +41,7 @@ Middlewares.connectors = function() {
 
         var serviceId = req.query['serviceId'];
 
-        req.sc = Connectors.getConnector(serviceId) || null;
+        req.serviceConnector = Connectors.getConnector(serviceId) || null;
 
         next();
     };

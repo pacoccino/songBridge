@@ -1,9 +1,9 @@
-var Connector = function() {
+/*class Connector {
 
-};
+    this.infos = {
+        name: 'undefined',
+        serviceId: 'undefined'
+    };
+}
 
-Connector.infos = {
-    name: 'undefined'
-};
-
-module.exports = Connector;
+module.exports = Connector;*/
