@@ -4,10 +4,13 @@ var request = require('request'); // "Request"
 var cookieParser = require('cookie-parser');
 
 var ApiRouter = require('./routes/router');
+var AuthMiddleware = require('./middlewares/auth');
 
 var app = express();
 
 app.use(cookieParser());
+
+app.use(AuthMiddleware());
 
 app.use('/api', ApiRouter);
 

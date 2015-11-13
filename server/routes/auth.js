@@ -21,74 +21,54 @@ AuthRouter.get('/', function(req,res) {res.send('auth ok')});
 
 AuthRouter.get('/login/:serviceId?', function(req, res) {
 
-    var connector = Connectors.getConnector(req.params.serviceId);
+    // Store state for coming back
+    var stateKey = req.params.serviceId + '_auth_state';
+    var state = Helpers.generateRandomString(16);
+    res.cookie(stateKey, state);
 
-    if(connector) {
-
-        // Store state for coming back
-        var stateKey = req.params.serviceId + '_auth_state';
-        var state = Helpers.generateRandomString(16);
-        res.cookie(stateKey, state);
-
-        connector.askLogin(req, res, state);
-    }
-    else {
-        Errors.sendError(res, 'UNKNOWN_SERVICE');
-    }
-
+    req.serviceConnector.askLogin(req, res, state);
 });
 
 AuthRouter.get('/callback/:serviceId?', function(req, res) {
 
-    var connector = Connectors.getConnector(req.params.serviceId);
+    var stateKey = req.params.serviceId + '_auth_state';
+    var storedState = req.cookies ? req.cookies[stateKey] : null;
 
-    if(connector) {
+    var state = req.query.state || null;
 
+    if (state === null || state !== storedState) {
+        Errors.sendError(res, 'AUTH_STATE_MISMATCH');
+    } else {
 
-        var stateKey = req.params.serviceId + '_auth_state';
-        var storedState = req.cookies ? req.cookies[stateKey] : null;
+        res.clearCookie(stateKey);
 
-        var state = req.query.state || null;
-
-        if (state === null || state !== storedState) {
-            Errors.sendError(res, 'AUTH_STATE_MISMATCH');
-        } else {
-
-            res.clearCookie(stateKey);
-
-            connector.authCallback(req, res);
-        }
-    }
-    else {
-        Errors.sendError(res, 'UNKNOWN_SERVICE');
+        req.serviceConnector.authCallback(req, res);
     }
 });
 
 AuthRouter.get('/refresh/:serviceId?', function(req, res) {
 
-    var connector = Connectors.getConnector(req.params.serviceId);
-
-    if(connector && connector.refreshToken) {
-
-        connector.refreshToken(req, res);
-    }
-    else {
-        Errors.sendError(res, 'UNKNOWN_SERVICE');
-    }
+    req.serviceConnector.refreshToken(req, res);
 });
 
 AuthRouter.get('/logout/:serviceId?', function(req, res) {
 
-    var connector = Connectors.getConnector(req.params.serviceId);
+    req.serviceConnector.logout(req, res);
+});
 
-    if(connector && connector.refreshToken) {
+AuthRouter.param('serviceId', function(req, res, next, name) {
 
-        connector.logout(req, res);
+    var connector = Connectors.getConnector(name);
+
+    if(connector) {
+
+        req.serviceConnector = connector;
+
+        next();
     }
     else {
         Errors.sendError(res, 'UNKNOWN_SERVICE');
     }
 });
-
 
 module.exports = AuthRouter;

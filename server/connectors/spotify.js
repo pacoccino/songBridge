@@ -3,9 +3,7 @@ var request = require('request'); // "Request"
 
 var Config = require('../config/config');
 
-var Spotify = function() {
-
-};
+var Spotify = {};
 
 Spotify.infos = {
     serviceId: 'spotify',
@@ -16,8 +14,6 @@ var client_id = '29301ecd40bc431096167df74fd4937c';
 var client_secret = '791f299041f0455c83d95b8854a91bb3';
 var redirect_uri = Config.host + '/api/auth/callback/' + Spotify.infos.serviceId;
 var authorizeUrl = 'https://accounts.spotify.com/authorize';
-
-var cookie_name = Spotify.infos.serviceId + '_access_token';
 
 Spotify.askLogin = function(req, res, state) {
 
@@ -33,7 +29,7 @@ Spotify.askLogin = function(req, res, state) {
     );
 };
 
-Spotify.authCallback = function(req,res) {
+Spotify.authCallback = function(req, res) {
 
     var code = req.query.code || null;
 
@@ -53,10 +49,12 @@ Spotify.authCallback = function(req,res) {
     request.post(authOptions, function(error, response, body) {
         if (!error && response.statusCode === 200) {
 
-            var access_token = body.access_token,
-                refresh_token = body.refresh_token;
+            var tokens = {
+                access_token: body.access_token,
+                refresh_token: body.refresh_token
+            };
 
-            res.cookie(cookie_name, access_token);
+            req.user.setConnection(Spotify, tokens);
 
             var options = {
                 url: 'https://api.spotify.com/v1/me',
@@ -70,25 +68,16 @@ Spotify.authCallback = function(req,res) {
             });
 
             // we can also pass the token to the browser to make requests from there
-            res.redirect('/#' +
-                         querystring.stringify({
-                             access_token: access_token,
-                             refresh_token: refresh_token
-                         })
-            );
+            res.redirect('/');
         } else {
-            res.redirect('/#' +
-                         querystring.stringify({
-                             error: 'invalid_token'
-                         })
-            );
+            res.redirect('/#?error=spotifycallback');
         }
     });
 };
 
 Spotify.logout = function(req, res) {
 
-    res.clearCookie(cookie_name);
+    req.user.unsetConnection(Spotify, tokens);
     res.send('Successfully logged out');
 };
 
@@ -108,6 +97,8 @@ Spotify.refreshToken = function(req, res) {
     request.post(authOptions, function(error, response, body) {
         if (!error && response.statusCode === 200) {
             var access_token = body.access_token;
+            req.user.refreshToken(Spotify, access_token);
+
             res.send({
                 'access_token': access_token
             });
