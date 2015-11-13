@@ -9,30 +9,19 @@
 
 var express = require('express'); // Express web server framework
 var request = require('request'); // "Request"
-var querystring = require('querystring'); // "Request"
 
-var Helpers = require('./../modules/helpers');
+var Middlewares = require('./../modules/middlewares');
 
 var LibRouter = express.Router({ params: 'inherit' });
 
-
 LibRouter.get('/', function(req,res) {res.send('library ok')});
+
+LibRouter.use(Middlewares.needConnector());
 
 LibRouter.get('/playlists', function(req, res) {
 
-    var options = {
-        url: 'https://api.spotify.com/v1/users/ehpys/playlists',
-        headers: { 'Authorization': 'Bearer ' + loggedtoken },
-        json: true
-    };
-
-    // use the access token to access the Spotify Web API
-    request.get(options, function(error, response, body) {
-        console.log(body);
-        res.json(body);
-    });
+    req.serviceConnector.getPlaylists(req, res);
 
 });
-
 
 module.exports = LibRouter;

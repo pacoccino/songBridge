@@ -77,7 +77,7 @@ Spotify.authCallback = function(req, res) {
 
 Spotify.logout = function(req, res) {
 
-    req.user.unsetConnection(Spotify, tokens);
+    req.user.unsetConnection(Spotify);
     res.send('Successfully logged out');
 };
 
@@ -96,13 +96,30 @@ Spotify.refreshToken = function(req, res) {
 
     request.post(authOptions, function(error, response, body) {
         if (!error && response.statusCode === 200) {
+
             var access_token = body.access_token;
+
             req.user.refreshToken(Spotify, access_token);
 
             res.send({
                 'access_token': access_token
             });
         }
+    });
+};
+
+Spotify.getPlaylists = function(req, res) {
+
+    var options = {
+        url: 'https://api.spotify.com/v1/users/ehpys/playlists',
+        headers: { 'Authorization': 'Bearer ' + loggedtoken },
+        json: true
+    };
+
+    // use the access token to access the Spotify Web API
+    request.get(options, function(error, response, body) {
+        console.log(body);
+        res.json(body);
     });
 };
 

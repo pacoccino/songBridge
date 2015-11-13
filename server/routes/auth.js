@@ -9,17 +9,20 @@
 
 var express = require('express'); // Express web server framework
 var request = require('request'); // "Request"
-var querystring = require('querystring'); // "Request"
 
 var Helpers = require('./../modules/helpers');
 var Errors = require('./../modules/errors');
-var Connectors = require('./../connectors/connectors');
+var Middlewares = require('./../modules/middlewares');
 
 var AuthRouter = express.Router({ params: 'inherit' });
 
-AuthRouter.get('/', function(req,res) {res.send('auth ok')});
+AuthRouter.get('/', function(req,res) {
+    res.send('auth ok')}
+);
 
-AuthRouter.get('/login/:serviceId?', function(req, res) {
+AuthRouter.use(Middlewares.needConnector());
+
+AuthRouter.get('/login', function(req, res) {
 
     // Store state for coming back
     var stateKey = req.params.serviceId + '_auth_state';
@@ -29,7 +32,7 @@ AuthRouter.get('/login/:serviceId?', function(req, res) {
     req.serviceConnector.askLogin(req, res, state);
 });
 
-AuthRouter.get('/callback/:serviceId?', function(req, res) {
+AuthRouter.get('/callback', function(req, res) {
 
     var stateKey = req.params.serviceId + '_auth_state';
     var storedState = req.cookies ? req.cookies[stateKey] : null;
@@ -46,29 +49,21 @@ AuthRouter.get('/callback/:serviceId?', function(req, res) {
     }
 });
 
-AuthRouter.get('/refresh/:serviceId?', function(req, res) {
+AuthRouter.get('/refresh', function(req, res) {
 
     req.serviceConnector.refreshToken(req, res);
 });
 
-AuthRouter.get('/logout/:serviceId?', function(req, res) {
+AuthRouter.get('/logout', function(req, res) {
 
     req.serviceConnector.logout(req, res);
 });
 
-AuthRouter.param('serviceId', function(req, res, next, name) {
+AuthRouter.get('/authState', function(req, res) {
 
-    var connector = Connectors.getConnector(name);
+    var tokens = req.user.getConnection(req.serviceConnector);
 
-    if(connector) {
-
-        req.serviceConnector = connector;
-
-        next();
-    }
-    else {
-        Errors.sendError(res, 'UNKNOWN_SERVICE');
-    }
+    res.send(tokens);
 });
 
 module.exports = AuthRouter;
