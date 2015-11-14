@@ -1,8 +1,8 @@
 var Config = {};
 
-Config.hostname = "localhost";
-Config.port = 8080;
+Config.hostname = "song-bridge.herokuapp.com";
+Config.port = null;
 
-Config.host = 'http://' + Config.hostname + ':' + Config.port;
+Config.host = 'http://' + Config.hostname + (Config.port ? ':' + Config.port : '');
 
 module.exports = Config;
