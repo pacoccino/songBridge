@@ -4,6 +4,7 @@ function User() {
     this._id = _.uniqueId();
 
     this.connections = {};
+    this.userInfos = {};
 }
 
 User.prototype.setConnection = function(service, tokens) {
@@ -14,6 +15,16 @@ User.prototype.setConnection = function(service, tokens) {
 User.prototype.getConnection = function(service) {
 
     return this.connections[service.infos.serviceId];
+};
+
+User.prototype.setUserInfo = function(service, infos) {
+
+    this.userInfos[service.infos.serviceId] = infos;
+};
+
+User.prototype.getUserInfo = function(service) {
+
+    return this.userInfos[service.infos.serviceId];
 };
 
 User.prototype.refreshToken = function(service, access_token) {

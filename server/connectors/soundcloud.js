@@ -72,13 +72,13 @@ class SoundCloud extends Connector {
 
                 var options = {
                     url: 'https://api.soundcloud.com/me',
-                    qs: {oauth_token: tokens.access_token},
+                    qs: { oauth_token: tokens.access_token },
                     json: true
                 };
 
                 // use the access token to access the Spotify Web API
                 request.get(options, function(error, response, body) {
-                    console.log(body);
+                    req.user.setUserInfo(self, body);
                 });
 
                 // we can also pass the token to the browser to make requests from there

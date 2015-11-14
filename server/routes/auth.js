@@ -71,4 +71,16 @@ AuthRouter.get('/state', function(req, res) {
     }
 });
 
+AuthRouter.get('/me', function(req, res) {
+
+    var infos = req.user.getUserInfo(req.serviceConnector);
+
+    if(!infos) {
+        res.send("Not connected");
+    }
+    else {
+        res.send(infos);
+    }
+});
+
 module.exports = AuthRouter;

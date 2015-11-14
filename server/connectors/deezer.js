@@ -71,15 +71,14 @@ class Deezer extends Connector {
                     req.user.setConnection(self, tokens);
 
                     var options = {
-                        url: 'https://api.deezer.com/user/me' + '?' +
-                            querystring.stringify({
-                                access_token: tokens.access_token
-                            })
+                        url: 'https://api.deezer.com/user/me',
+                        qs: { access_token: tokens.access_token },
+                        json: true
                     };
 
                     // use the access token to access the Spotify Web API
                     request.get(options, function(error, response, body) {
-                        console.log(body);
+                        req.user.setUserInfo(self, body);
                     });
 
                     // we can also pass the token to the browser to make requests from there
