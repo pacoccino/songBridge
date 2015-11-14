@@ -13,7 +13,7 @@
   },
   "scripts": {
     "postinstall": "./node_modules/.bin/bower update",
-    "prestart": "npm update"
+    "start": "node server/app.js"
   },
   "dependencies": {
     "bower": "^1.3.1",
