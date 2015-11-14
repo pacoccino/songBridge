@@ -3,12 +3,15 @@
 var _ = require('lodash');
 
 var Spotify = require('./spotify');
+var Deezer = require('./deezer');
 
 var Connectors = {};
 
 Connectors.list = [];
 
 Connectors.list.push(new Spotify());
+Connectors.list.push(new Deezer());
+
 
 Connectors.getConnector = function(serviceId) {
 

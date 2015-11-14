@@ -21,6 +21,7 @@
     "prestart": "npm update"
   },
   "dependencies": {
+    "body-parser": "^1.14.1",
     "lodash": "^3.10.1",
     "mongoose": "^4.2.2"
   }

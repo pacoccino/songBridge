@@ -129,6 +129,4 @@ class Spotify extends Connector {
     };
 }
 
-
-
 module.exports = Spotify;

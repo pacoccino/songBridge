@@ -63,7 +63,12 @@ AuthRouter.get('/state', function(req, res) {
 
     var tokens = req.user.getConnection(req.serviceConnector);
 
-    res.send(tokens);
+    if(!tokens) {
+        res.send("Not connected");
+    }
+    else {
+        res.send(tokens);
+    }
 });
 
 module.exports = AuthRouter;

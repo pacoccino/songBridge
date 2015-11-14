@@ -3,6 +3,7 @@
 var express = require('express'); // Express web server framework
 var request = require('request'); // "Request"
 var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
 
 var ApiRouter = require('./routes/router');
 var Middlewares = require('./modules/middlewares');
@@ -10,6 +11,7 @@ var Middlewares = require('./modules/middlewares');
 var app = express();
 
 app.use(cookieParser());
+//app.use(bodyParser.json());
 
 app.use(Middlewares.auth());
 app.use(Middlewares.connectors());
