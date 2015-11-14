@@ -5,7 +5,7 @@ var request = require('request'); // "Request"
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var Config = require('../config/config');
+var Config = require('./config/config');
 
 var ApiRouter = require('./routes/router');
 var Middlewares = require('./modules/middlewares');
