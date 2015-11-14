@@ -1,10 +1,12 @@
 {
-  "name": "material-start",
-  "private": true,
+  "name": "song-bridge",
   "version": "0.0.2",
-  "description": "A starter project for AngularJS Material",
-  "repository": "https://github.com/angular/material-start",
+  "description": "Online music platform synchronization",
+  "repository": "https://github.com/pakokrew/songBridge",
   "license": "MIT",
+  "engines" : {
+      "node" : ">=4.0"
+  },
   "devDependencies": {
     "karma": "~0.10",
     "http-server": "^0.6.1",
