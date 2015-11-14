@@ -1,14 +1,14 @@
 <md-content flex id="content" style="overflow:auto;">
 
-  <div ng-if="!connector.auth">
+  <div ng-if="!connector.userInfo">
     <md-button class="md-raised md-primary" ng-click="connector.connect()()">Connect to {{connector.infos.name}}</md-button>
   </div>
 
-  <div ng-if="connector.auth">
+  <div ng-if="connector.userInfo">
     <md-button class="md-raised md-primary" ng-click="connector.disconnect()">Disconnect from {{connector.infos.name}}</md-button>
     <br/>
 
-    {{connector.auth.accessToken}}
+    {{connector.userInfo}}
   </div>
 
 </md-content>

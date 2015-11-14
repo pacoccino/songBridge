@@ -11,7 +11,7 @@
     <md-list-item ng-repeat="element in list">
       <md-button ng-click="select(element)" ng-class="{'selected' : $index === selected }">
         <md-icon md-svg-icon="svg-2" class="avatar"></md-icon>
-        {{element.name}}
+        {{listName(element)}}
       </md-button>
     </md-list-item>
   </md-list>

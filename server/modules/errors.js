@@ -4,6 +4,7 @@ Errors.UNKNOWN = { code: 500, message:  "Unkown error" };
 Errors.UNKNOWN_SERVICE = { code: 400, message:  "Unkown music service" };
 Errors.AUTH_STATE_MISMATCH = { code: 400, message:  "Authentication state mismatch" };
 Errors.AUTH_ERROR = { code: 400, message:  "Authentication error" };
+Errors.AUTH_NOT_CONNECTED = { code: 401, message:  "Not connected" };
 
 Errors.sendError = function(res, errorId, exception) {
 

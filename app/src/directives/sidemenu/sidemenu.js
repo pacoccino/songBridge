@@ -23,6 +23,18 @@ app.directive('sidemenu', function() {
                     scope.onSelect({selection: element})
                 };
 
+                scope.listName = function(element) {
+                    if(element.getName) {
+                        return element.getName();
+                    }
+                    else if(element.name) {
+                        return element.name;
+                    }
+                    else {
+                        return "-";
+                    }
+                }
+
             }
         };
     }

@@ -64,7 +64,7 @@ AuthRouter.get('/state', function(req, res) {
     var tokens = req.user.getConnection(req.serviceConnector);
 
     if(!tokens) {
-        res.send("Not connected");
+        Errors.sendError(res, "AUTH_NOT_CONNECTED");
     }
     else {
         res.send(tokens);
@@ -76,7 +76,7 @@ AuthRouter.get('/me', function(req, res) {
     var infos = req.user.getUserInfo(req.serviceConnector);
 
     if(!infos) {
-        res.send("Not connected");
+        Errors.sendError(res, "AUTH_NOT_CONNECTED");
     }
     else {
         res.send(infos);

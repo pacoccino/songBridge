@@ -10,6 +10,7 @@ app.directive('content', function() {
             scope.connect = function() {
                 scope.connector.connect();
             };
+
             scope.disconnect = function() {
                 scope.connector.disconnect();
             };

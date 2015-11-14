@@ -1,23 +1,18 @@
 app.controller('MainController', [
-    '$scope', '$mdSidenav', '$mdBottomSheet', '$log', '$q', '$mdToast',
+    '$scope', '$mdSidenav', '$mdBottomSheet', '$log', '$q', '$mdToast', 'Connectors',
 
-    function ( $scope, $mdSidenav, $mdBottomSheet, $log, $q, $mdToast ) {
+    function ( $scope, $mdSidenav, $mdBottomSheet, $log, $q, $mdToast, Connectors ) {
 
-        $scope.list1 = [
-            /*{
-                name: 'Spotify',
-                connector: Spotify
-            },
-            {
-                name: 'Deezer',
-                connector: Deezer
-            }*/
-        ];
-/*
-        $scope.selectConnector = function(element) {
-            $scope.connector = element.connector;
+        $scope.list1 = [];
+
+        $scope.selectConnector = function(connector) {
+            $scope.connector = connector;
         };
 
-        $scope.selectConnector($scope.list1[0]);*/
+        Connectors.connectorsReady.then(function(connectors) {
+            $scope.list1 = connectors;
+            $scope.selectConnector(connectors[0]);
+        })
+
     }
 ]);

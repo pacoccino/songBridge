@@ -1,41 +1,53 @@
-app.service('Connector', function($http, Connectors, Backend) {
+app.service('Connector', function($http, Backend, $window) {
 
-  this.infos = {
+  function Connector(infos) {
+    this.infos = infos;
+    this.userInfo = null;
+  }
 
+  Connector.prototype.getName = function (url) {
+    return this.infos.name;
   };
 
-  var appendServiceUrl = function(url) {
-    url += "?serviceId=" + Connector.infos.serviceId;
+  Connector.prototype.appendServiceUrl = function (url) {
+    return url + "?serviceId=" + this.infos.serviceId;
   };
 
-  var callServiceUrl = function(url) {
-    url = appendServiceUrl(url);
+  Connector.prototype.callServiceUrl = function (url) {
+    url = this.appendServiceUrl(url);
 
     $window.location.href = url;
   };
 
-  var connect = function() {
+  Connector.prototype.connect = function () {
     var loginUrl = Backend.apiUrl + "auth/login";
 
-    callServiceUrl(loginUrl);
+    this.callServiceUrl(loginUrl);
   };
 
-  var disconnect = function() {
+  Connector.prototype.disconnect = function () {
     var loginUrl = Backend.apiUrl + "auth/logout";
 
-    callServiceUrl(loginUrl);
+    this.callServiceUrl(loginUrl);
   };
 
-  var authState = function() {
-    var loginUrl = Backend.apiUrl + "auth/authState";
+  Connector.prototype.getUserInfo = function () {
 
-    loginUrl = appendServiceUrl(loginUrl);
+    var reqUrl = Backend.apiUrl + "auth/me";
+    reqUrl = this.appendServiceUrl(reqUrl);
 
+    var req = {
+      url: reqUrl,
+      method: 'GET'
+    };
 
+    var self = this;
+    $http(req).then(function(userInfo){
+      self.userInfo = userInfo.data;
+    }, function(error) {
+      self.userInfo = null;
+    });
   };
 
-  return {
-    connect: connect,
-    disconnect: disconnect
-  };
+  return Connector;
 });

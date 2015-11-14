@@ -1,6 +1,7 @@
-app.service('Connectors', function($http, Backend) {
+app.service('Connectors', function($http, $q, Backend, Connector) {
 
     var _connectors = [];
+    var _connectorsReadyDefer = $q.defer();
 
     var getConnectors = function() {
         var request = {
@@ -8,7 +9,13 @@ app.service('Connectors', function($http, Backend) {
         };
 
         $http(request).then(function(data) {
-            _connectors = data;
+            var connectorsInfo = data.data;
+            angular.forEach(connectorsInfo, function(connectorInfo) {
+                var connector = new Connector(connectorInfo);
+                connector.getUserInfo();
+                _connectors.push(connector);
+            });
+            _connectorsReadyDefer.resolve(_connectors);
         });
     };
 
@@ -16,6 +23,7 @@ app.service('Connectors', function($http, Backend) {
 
     return {
         getConnectors: getConnectors,
-        connectors: _connectors
+        connectors: _connectors,
+        connectorsReady: _connectorsReadyDefer.promise
     };
 });
