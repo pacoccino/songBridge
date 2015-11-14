@@ -1,6 +1,6 @@
 var Config = {};
 
-Config.protocol = "http";
+Config.protocol = "https";
 Config.hostname = "song-bridge.herokuapp.com";
 Config.port = null;
 
