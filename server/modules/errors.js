@@ -15,7 +15,7 @@ Errors.sendError = function(res, errorId, exception) {
     var message = error.message;
 
     if(exception) {
-        message += "\n" + exception.toString();
+        message += " : " + exception.toString();
     }
 
     res.status(error.code).send(message);
