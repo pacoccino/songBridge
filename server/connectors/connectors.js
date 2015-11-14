@@ -4,6 +4,7 @@ var _ = require('lodash');
 
 var Spotify = require('./spotify');
 var Deezer = require('./deezer');
+var SoundCloud = require('./soundcloud');
 
 var Connectors = {};
 
@@ -11,6 +12,7 @@ Connectors.list = [];
 
 Connectors.list.push(new Spotify());
 Connectors.list.push(new Deezer());
+Connectors.list.push(new SoundCloud());
 
 
 Connectors.getConnector = function(serviceId) {

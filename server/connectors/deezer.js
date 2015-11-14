@@ -55,17 +55,17 @@ class Deezer extends Connector {
                         secret: platformParams.client_secret,
                         code: code,
                         output: 'json'
-                    })
+                    }),
+                json: true
             };
 
             request.get(authOptions, function(error, response, body) {
 
                 if (!error && response.statusCode === 200) {
 
-                    var parsedBody = JSON.parse(body);
                     var tokens = {
-                        access_token: parsedBody["access_token"],
-                        expires: parsedBody["expires"]
+                        access_token: body.access_token,
+                        expires: body.expires
                     };
 
                     req.user.setConnection(self, tokens);
