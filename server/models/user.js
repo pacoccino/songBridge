@@ -6,24 +6,24 @@ function User() {
     this.connections = {};
 }
 
-User.prototype.setConnection = function(Service, tokens) {
+User.prototype.setConnection = function(service, tokens) {
 
-    this.connections[Service.infos.serviceId] = tokens;
+    this.connections[service.infos.serviceId] = tokens;
 };
 
-User.prototype.getConnection = function(Service) {
+User.prototype.getConnection = function(service) {
 
-    return this.connections[Service.infos.serviceId];
+    return this.connections[service.infos.serviceId];
 };
 
-User.prototype.refreshToken = function(Service, access_token) {
+User.prototype.refreshToken = function(service, access_token) {
 
-    this.connections[Service.infos.serviceId].access_token = access_token;
+    this.connections[service.infos.serviceId].access_token = access_token;
 };
 
-User.prototype.unsetConnection = function(Service) {
+User.prototype.unsetConnection = function(service) {
 
-    delete this.connections[Service.infos.serviceId];
+    delete this.connections[service.infos.serviceId];
 };
 
 

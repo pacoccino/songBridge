@@ -5,7 +5,7 @@ app.service('Connector', function($http, Connectors, Backend) {
   };
 
   var appendServiceUrl = function(url) {
-    url += "?serviceId=" + this.infos.serviceId;
+    url += "?serviceId=" + Connector.infos.serviceId;
   };
 
   var callServiceUrl = function(url) {

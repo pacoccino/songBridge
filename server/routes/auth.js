@@ -59,7 +59,7 @@ AuthRouter.get('/logout', function(req, res) {
     req.serviceConnector.logout(req, res);
 });
 
-AuthRouter.get('/authState', function(req, res) {
+AuthRouter.get('/state', function(req, res) {
 
     var tokens = req.user.getConnection(req.serviceConnector);
 

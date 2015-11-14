@@ -1,3 +1,4 @@
+"use strict";
 
 var express = require('express'); // Express web server framework
 var request = require('request'); // "Request"
