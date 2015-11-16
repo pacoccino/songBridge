@@ -1,7 +1,8 @@
 var app = angular.module('App', [
     'ngMaterial',
     'ngRoute',
-    'ngCookies'
+    'ngCookies',
+    'ngMdIcons'
 ]);
 
 app.config(function($mdThemingProvider, $mdIconProvider, $routeProvider){
@@ -21,12 +22,36 @@ app.config(function($mdThemingProvider, $mdIconProvider, $routeProvider){
             .accentPalette('red');
 
 
-
-    $routeProvider.when('/main', {
-      controller: 'MainController',
-      templateUrl:'src/views/main/main.html'
-    }).otherwise({
-      redirectTo: '/main'
+    var customBlueMap = 		$mdThemingProvider.extendPalette('light-blue', {
+        'contrastDefaultColor': 'light',
+        'contrastDarkColors': ['50'],
+        '50': 'ffffff'
     });
+    $mdThemingProvider.definePalette('customBlue', customBlueMap);
+    $mdThemingProvider.theme('default')
+        .primaryPalette('customBlue', {
+            'default': '500',
+            'hue-1': '50'
+        })
+        .accentPalette('pink');
+
+
+
+    $routeProvider
+        .when('/main', {
+            controller: 'MainController',
+            templateUrl:'src/views/main/main.html'
+        })
+        .when('/platform', {
+            controller: 'PlatformController',
+            templateUrl:'src/views/Platform/platform.html'
+        })
+        .when('/boby', {
+            controller: 'BobyController',
+            templateUrl:'src/views/Boby/bobyView.html'
+        })
+        .otherwise({
+          redirectTo: '/main'
+        });
 
 });

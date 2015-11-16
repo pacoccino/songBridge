@@ -1,0 +1,74 @@
+<md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
+    <md-toolbar class="md-tall md-hue-2">
+        <span flex></span>
+        <div layout="column" class="md-toolbar-tools-bottom inset">
+            <div layout="row">
+
+                <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                    <ng-md-icon md-menu-origin icon="arrow_back"></ng-md-icon>
+                </md-button>
+                <user-avatar></user-avatar>
+                <span></span>
+                <md-menu md-offset="0 -7">
+                    <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                        <ng-md-icon md-menu-origin icon="dashboard"></ng-md-icon>
+                    </md-button>
+                    <md-menu-content width="4">
+                        <md-menu-item ng-repeat="item in ['Spotify', 'Deezer', 'SoundCloud']">
+                            <md-button ng-click="ctrl.announceClick($index)"> <span md-menu-align-target>{{item}}</span>  </md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </div>
+            <div>Spotify</div>
+            <div>pacopac</div>
+        </div>
+    </md-toolbar>
+    <md-list>
+        <md-list-item>
+            <md-button ng-click="select(element)" ng-class="{'selected' : $index === 0 }">
+                <md-item-content md-ink-ripple layout="row" layout-align="start center">
+                    <div class="inset">
+                        <ng-md-icon icon="dashboard"></ng-md-icon>
+                    </div>
+                    <div class="inset">Spotify Library
+                    </div>
+
+                    <md-menu md-offset="0 -7">
+                        <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                            <ng-md-icon md-menu-origin icon="dashboard"></ng-md-icon>
+                        </md-button>
+                        <md-menu-content width="4">
+                            <md-menu-item ng-repeat="item in ['Delete', 'Duplicate', 'Synchronize', 'Open ...']">
+                                <md-button ng-click="ctrl.announceClick($index)"> <span md-menu-align-target>{{item}}</span>  </md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+                </md-item-content>
+            </md-button>
+        </md-list-item>
+        <md-subheader>Playlists</md-subheader>
+        <md-list-item>
+            <md-button ng-click="select(element)" ng-class="{'selected' : $index === 0 }">
+                <md-item-content md-ink-ripple layout="row" layout-align="start center">
+                    <div class="inset">
+                        <ng-md-icon icon="dashboard"></ng-md-icon>
+                    </div>
+                    <div class="inset">Playlist 1
+                    </div>
+                </md-item-content>
+            </md-button>
+        </md-list-item>
+        <md-list-item>
+            <md-button ng-click="select(element)" ng-class="{'selected' : $index === selected }">
+                <md-item-content md-ink-ripple layout="row" layout-align="start center">
+                    <div class="inset">
+                        <ng-md-icon icon="dashboard"></ng-md-icon>
+                    </div>
+                    <div class="inset">Playlist 2
+                    </div>
+                </md-item-content>
+            </md-button>
+        </md-list-item>
+    </md-list>
+</md-sidenav>
