@@ -1,3 +1,102 @@
-.a {
-  color: black;
+@import 'mixins.scss';
+
+// All-application container
+.song-bridge {
+
+  height: 100%;
+
+  .main-menu {
+    height: 100%;
+    display: flex;
+  }
+  // Main application content
+  .application-frame {
+
+    // Frame title bar
+    .frame-title {
+
+    }
+
+    .frame-content {
+      height: 100%;
+    }
+    // Frames
+    .service-dashboard{
+      .service-card {
+        margin: 30px;
+        height: 300px;
+        cursor: pointer;
+
+        .service-logo {
+          display: block;
+          max-width:90%;
+          max-height:90%;
+          width: auto;
+          height: auto;
+        }
+
+        &:hover {
+          .service-logo {
+            -webkit-filter: blur(0px) grayscale(0) opacity(0.6);
+          }
+        }
+
+        &.spotify {
+          background-color: rgba(132, 189, 0, 1);
+          &:hover {
+            background-color: rgba(132, 189, 0, 0.3);
+          }
+        }
+        &.deezer {
+          background-color: rgba(58, 58, 58, 1);
+          &:hover {
+            background-color: rgba(58, 58, 58, 0.3);
+          }
+        }
+        &.soundcloud {
+          background-color: rgba(255, 85, 0, 1);
+          &:hover {
+            background-color: rgba(255, 85, 0, 0.3);
+          }
+        }
+      }
+    }
+  }
+
+  md-sidenav {
+    height:100%;
+  }
+}
+
+.service-icon {
+  max-width:24px;
+  max-height:24px;
+  width: auto;
+  height: auto;
+  &.si-m {
+    max-width:36px;
+    max-height:36px;
+  }
+  &.si-l {
+    max-width:48px;
+    max-height:48px;
+  }
+}
+
+.service-detail-modal {
+  min-width:400px;
+  max-width: 80%;
+  md-toolbar {
+    h2 {
+      margin-left: 7px;
+    }
+  }
+  .profile-header {
+    .picture {
+      margin:3px;
+    }
+    .resume {
+      padding-left:5px;
+    }
+  }
 }
