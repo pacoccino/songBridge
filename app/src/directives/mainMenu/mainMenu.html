@@ -6,9 +6,9 @@
             </h3>
         </div>
     </md-toolbar>
-    <md-list>
+    <md-list class="menu-list">
         <md-list-item>
-            <md-button ng-click="select(element)" ng-class="{'selected' : $index === selected }">
+            <md-button ng-click="select(element)" flex="100" ng-class="{'selected' : $index === selected }">
                 <md-item-content md-ink-ripple layout="row" layout-align="start center">
                     <div class="inset">
                         <ng-md-icon icon="dashboard"></ng-md-icon>
@@ -19,7 +19,7 @@
             </md-button>
         </md-list-item>
         <md-list-item>
-            <md-button ng-click="select(element)" ng-class="{'selected' : $index === selected }">
+            <md-button ng-click="select(element)" flex="100" ng-class="{'selected' : $index === selected }">
                 <md-item-content md-ink-ripple layout="row" layout-align="start center">
                     <div class="inset">
                         <ng-md-icon icon="dashboard"></ng-md-icon>

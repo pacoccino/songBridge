@@ -1,17 +1,29 @@
-<div layout="column">
-    <md-toolbar md-scroll-shrink >
+<div layout="column" class="service-dashboard">
+    <md-toolbar md-scroll-shrink class="frame-title">
         <div class="md-toolbar-tools">
             <h3>
                 <span>Music service connection</span>
             </h3>
         </div>
     </md-toolbar>
-    <div layout="row">
-        <md-whiteframe class="md-whiteframe-1dp" flex-sm="45" flex-gt-sm="35" flex-gt-md="25" layout layout-align="center center">
-            <span>.md-whiteframe-1dp</span>
-        </md-whiteframe>
-        <md-whiteframe class="md-whiteframe-1dp" flex-sm="45" flex-gt-sm="35" flex-gt-md="25" layout layout-align="center center">
-            <span>.md-whiteframe-1dp</span>
-        </md-whiteframe>
+    <div class="frame-content">
+
+        <div layout="row" layout-padding layout-wrap layout-fill style="padding-bottom: 32px;" ng-cloak ng-hide="selectedService">
+            <div flex="auto"></div>
+            <md-whiteframe class="service-card deezer md-whiteframe-1dp" flex-sm="45" flex-gt-sm="35" flex-gt-md="25" layout layout-align="center center" ng-click="showAdvanced()">
+                <img class="service-logo" src="assets/serviceResources/deezer/DeezerApplats_RVB_Blanc.png">
+            </md-whiteframe>
+            <md-whiteframe class="service-card soundcloud md-whiteframe-1dp" flex-sm="45" flex-gt-sm="35" flex-gt-md="25" layout layout-align="center center" ng-click="showAdvanced()">
+                <img class="service-logo" src="assets/serviceResources/soundcloud/sc_st_white_460x290.png">
+            </md-whiteframe>
+            <md-whiteframe class="service-card spotify md-whiteframe-1dp" flex-sm="45" flex-gt-sm="35" flex-gt-md="25" layout layout-align="center center" ng-click="showAdvanced()">
+                <img class="service-logo" src="assets/serviceResources/spotify/spotify-logo.png">
+            </md-whiteframe>
+            <div flex="auto"></div>
+        </div>
+
+        <div ng-show="selectedService">
+
+        </div>
     </div>
 </div>

@@ -51,7 +51,7 @@ app.config(function($mdThemingProvider, $mdIconProvider, $routeProvider){
             templateUrl:'src/views/Boby/bobyView.html'
         })
         .otherwise({
-          redirectTo: '/main'
+          redirectTo: '/boby'
         });
 
 });
