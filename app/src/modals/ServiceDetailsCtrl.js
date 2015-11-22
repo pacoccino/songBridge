@@ -5,7 +5,9 @@ function ServiceDetailsCtrl($scope, $mdDialog) {
     $scope.cancel = function() {
         $mdDialog.cancel();
     };
-    $scope.answer = function() {
-        $mdDialog.hide();
+    $scope.connect = function() {
+        $scope.service = {
+            connected: true
+        };
     };
 }

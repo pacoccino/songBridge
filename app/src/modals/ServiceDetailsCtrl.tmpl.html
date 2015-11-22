@@ -5,7 +5,7 @@
                 <img class="service-icon si-m" style="margin:5px;" src="assets/serviceResources/soundcloud/sc_st_white_460x290.png" />
                 <h2>SoundCloud</h2>
                 <span flex></span>
-                <md-button class="md-icon-button" ng-click="cancel()">
+                <md-button class="md-icon-button" ng-click="hide()">
                     <md-icon md-svg-src="assets/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
                 </md-button>
             </div>
@@ -40,7 +40,7 @@
 
         <div ng-hide="service.connected" layout="row" layout-sm="column" layout-align="center">
             <p>You are not connected</p>
-            <md-button class="md-raised md-primary">Click here to connect</md-button>
+            <md-button class="md-raised md-primary" ng-click="connect()">Click here to connect</md-button>
         </div>
     </form>
 </md-dialog>

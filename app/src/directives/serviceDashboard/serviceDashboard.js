@@ -3,7 +3,12 @@ app.directive('serviceDashboard', function() {
     return {
         restrict: 'E',
         templateUrl: 'src/directives/serviceDashboard/serviceDashboard.html',
-        controller: function($scope, $mdDialog) {
+        controller: function($scope, $mdDialog, $location) {
+
+            $scope.goToLibrary = function() {
+
+                $location.path('/platform');
+            };
 
             $scope.showAdvanced = function(ev) {
                 $mdDialog.show({
