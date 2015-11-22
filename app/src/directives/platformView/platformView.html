@@ -1,89 +1,110 @@
-<md-button class="md-fab md-fab-bottom-right" aria-label="Add" ng-click="showAdd($event)">
-    <ng-md-icon icon="add"></ng-md-icon>
-</md-button>
-<md-toolbar ng-show="!showSearch">
-    <div class="md-toolbar-tools">
-        <md-button ng-click="toggleSidenav('left')" hide-gt-md aria-label="Menu">
-            <ng-md-icon icon="menu"></ng-md-icon>
-        </md-button>
-        <h3>
-            Playlist 1
-        </h3>
-        <span flex></span>
-        <md-button aria-label="Search" ng-click="showSearch = !showSearch">
-            <ng-md-icon icon="search"></ng-md-icon>
-        </md-button>
-        <md-button aria-label="Open Settings" ng-click="showListBottomSheet($event)">
-            <ng-md-icon icon="more_vert"></ng-md-icon>
-        </md-button>
-    </div>
-</md-toolbar>
-<md-toolbar class="md-hue-1" ng-show="showSearch">
-    <div class="md-toolbar-tools">
-        <md-button ng-click="showSearch = !showSearch" aria-label="Back">
-            <ng-md-icon icon="arrow_back"></ng-md-icon>
-        </md-button>
-        <h3 flex="10">
-            Back
-        </h3>
-        <md-input-containerflex>
-            <label>&nbsp;</label>
-            <input ng-model="search.who" placeholder="enter search">
-        </md-input-container>
-        <md-button aria-label="Search" ng-click="showSearch = !showSearch">
-            <ng-md-icon icon="search"></ng-md-icon>
-        </md-button>
-        <md-button aria-label="Open Settings" ng-click="showListBottomSheet($event)">
-            <ng-md-icon icon="more_vert"></ng-md-icon>
-        </md-button>
+<div class="library-view">
+    <div class="frame-title">
+        <md-toolbar ng-show="!showSearch">
+            <div class="md-toolbar-tools">
+                <md-button ng-click="toggleSidenav('left')" hide-gt-md aria-label="Menu">
+                    <ng-md-icon icon="menu"></ng-md-icon>
+                </md-button>
+                <h3>
+                    Playlist 1
+                </h3>
+                <span flex></span>
+                <md-button aria-label="Search" ng-click="showSearch = !showSearch">
+                    <ng-md-icon icon="search"></ng-md-icon>
+                </md-button>
+                <md-button aria-label="Open Settings" ng-click="showListBottomSheet($event)">
+                    <ng-md-icon icon="more_vert"></ng-md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
     </div>
 
-</md-toolbar>
-<md-content flex md-scroll-y>
-    <div layout="row">
-        <md-button class="md-raised md-primary">Open in Spotify</md-button>
-        <md-input-container>
-            <label> Send to</label>
-            <md-select ng-model="topping">
-                <md-optgroup label="service">
-                    <md-option ng-value="de"" >Deezer</md-option>
-                    <md-option ng-value="de"" >Spotify</md-option>
-                </md-optgroup>
-            </md-select>
-        </md-input-container>
+
+    <div class="frame-content">
+        <md-content md-scroll-y>
+            <md-whiteframe class="md-whiteframe-2dp">
+                <div layout="row">
+                    <md-button class="md-raised md-primary">Open in Spotify</md-button>
+                    <md-input-container>
+                        <label> Send to</label>
+                        <md-select ng-model="topping">
+                            <md-optgroup label="service">
+                                <md-option ng-value="de"" >Deezer</md-option>
+                                <md-option ng-value="de"" >Spotify</md-option>
+                            </md-optgroup>
+                        </md-select>
+                    </md-input-container>
+                </div>
+            </md-whiteframe>
+
+            <md-whiteframe class="md-whiteframe-2dp">
+                <table class="library-table">
+                    <thead>
+                    <tr>
+                        <th>
+                            Title
+                        </th>
+                        <th>
+                            Artist
+                        </th>
+                        <th>
+                            Album
+                        </th>
+                        <th>
+                            Availability
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            Je mange
+                        </td>
+                        <td>
+                            Des carottes
+                        </td>
+                        <td>
+                            Vertes
+                        </td>
+                        <td>
+                            <md-button class="md-fab service-available spotify">
+                                S
+                                <md-tooltip md-direction="bottom">
+                                    Spotify
+                                </md-tooltip>
+                            </md-button>
+                            <md-button class="md-fab service-available deezer">
+                                D
+                                <md-tooltip md-direction="bottom">
+                                    Deezer
+                                </md-tooltip>
+                            </md-button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Ca sent
+                        </td>
+                        <td>
+                            L'oignon
+                        </td>
+                        <td>
+                            Dans ta bouche
+                        </td>
+                        <td>
+                            <md-button class="md-fab service-available soundcloud">
+                                S
+                            </md-button>
+                            <md-button class="md-fab service-available spotify">
+                                S
+                            </md-button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </md-whiteframe>
+
+        </md-content>
     </div>
 
-    <table class="table table-hover table-bordered">
-        <thead>
-        <tr>
-            <td>
-                Title
-            </td>
-            <td>
-                Artist
-            </td>
-            <td>
-                Availability
-            </td>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>
-                COucou
-            </td>
-            <td>
-                L'artiste
-            </td>
-            <td>
-                <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
-                    <ng-md-icon md-menu-origin icon="home"></ng-md-icon>
-                </md-button>
-                <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
-                    <ng-md-icon md-menu-origin icon="credit_card"></ng-md-icon>
-                </md-button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</md-content>
+</div>

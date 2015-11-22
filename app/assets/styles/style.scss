@@ -1,5 +1,8 @@
 @import 'mixins.scss';
 
+* {
+  box-sizing: border-box;
+}
 // All-application container
 .song-bridge {
 
@@ -8,7 +11,50 @@
   .main-menu {
     height: 100%;
     display: flex;
+    .toolbar-header {
+
+    }
   }
+  .platform-menu {
+    md-toolbar:not(.toolbar-header) {
+      background-color:rgba(255, 85, 0, 1);
+    }
+    .toolbar-service {
+      min-height: initial;
+      padding-top: 5px;
+      padding-bottom: 5px;
+      height: 190px;
+      max-height: 300px;
+
+      .toolbar-service-detail {
+        .profile-header {
+          .picture {
+            width: 100px;
+            height: 100px;
+            margin: 5px;
+          }
+          .resume {
+            padding-left: 10px;
+            h3 {
+              margin-top: 17px;
+            }
+          }
+        }
+      }
+    }
+
+    .playlist-list {
+      md-list-item {
+
+        .playlist-item {
+
+          width: 100%;
+        }
+      }
+    }
+
+  }
+
   // Main application content
   .application-frame {
 
@@ -20,14 +66,17 @@
     .frame-content {
       height: 100%;
     }
+
     // Frames
     .service-dashboard{
       .service-card {
         margin: 30px;
         height: 300px;
         cursor: pointer;
+        position: relative;
 
         .service-logo {
+          visibility: visible;
           display: block;
           max-width:90%;
           max-height:90%;
@@ -35,9 +84,32 @@
           height: auto;
         }
 
+        .service-card-detail {
+          visibility: hidden;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+        }
+        .service-card-split {
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.5);
+
+          md-icon {
+            margin: 10px;
+          }
+          //-webkit-filter: blur(0px) grayscale(0) opacity(0.6);
+          &:hover {
+            //-webkit-filter: opacity(1);
+            background-color: rgba(255, 255, 255, 0.64);
+
+          }
+        }
+
         &:hover {
-          .service-logo {
-            -webkit-filter: blur(0px) grayscale(0) opacity(0.6);
+          .service-card-detail {
+            visibility: visible;
           }
         }
 
@@ -49,14 +121,61 @@
         }
         &.deezer {
           background-color: rgba(58, 58, 58, 1);
-          &:hover {
+          /*&:hover {
             background-color: rgba(58, 58, 58, 0.3);
-          }
+          }*/
         }
         &.soundcloud {
           background-color: rgba(255, 85, 0, 1);
           &:hover {
             background-color: rgba(255, 85, 0, 0.3);
+          }
+        }
+      }
+    }
+
+    .library-view {
+      md-whiteframe {
+        margin: 20px;
+      }
+      .library-table {
+        border-collapse: collapse;
+        border-spacing: 0;
+        background-color: transparent;
+        width:100%;
+        border-top: 1px solid #ddd;
+        thead {
+          tr {
+            th {
+              padding: 12px 24px;
+              border-bottom: 1px solid #e7e8ea;
+              vertical-align: bottom;
+            }
+          }
+        }
+        tbody {
+          tr {
+            td {
+              padding: 12px 24px;
+              border-top: 1px solid #e7e8ea;
+            }
+          }
+          .service-available {
+            width:24px;
+            height:24px;
+            min-height:24px;
+            line-height:24px;
+            font-size: 0.9em;
+            font-weight: 200;
+            &.soundcloud {
+              background-color: orange;
+            }
+            &.spotify {
+              background-color: green;
+            }
+            &.deezer {
+              background-color: black;
+            }
           }
         }
       }
