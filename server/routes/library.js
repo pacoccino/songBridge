@@ -14,7 +14,7 @@ LibRouter.use(Middlewares.needConnection());
 
 LibRouter.get('/playlists', function(req, res) {
 
-    req.serviceConnector.getPlaylists(req.user, function(err, playlists) {
+    req.serviceConnector.getPlaylistList(req.user, function(err, playlists) {
         if(err) {
             Logger.error("Error while getting playlists", err);
         }

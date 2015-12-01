@@ -22,7 +22,7 @@ Users.prototype.createDebug = function(cb) {
         {
             infos : { serviceId: 'spotify'}
         },
-        {"access_token":"BQB2fy2QJPIBUIjX3dN8lXzVeMcohr9xzgl2HBp-Ht8_mnWdVQ_vonCimfxXM-d-pk6Pkrnchf-nrKDb9A3CrigZJHOwtFj_EDLh3vVnwRJlAxuY9lRV-glzv62K5VwQ7kWhYsR3b5kWZH_p8mCVy5oO","refresh_token":"AQBdDs0bvGFTwX4VTZRniS_nXMkf4Srsz49xy-umX7f9sukJylU1P3KPDP6JiNi2LNwffdWbREaVzZQ6VitlcFIvB3mf0-Ui402gSbb_DPdA4p_r8n-DfnP2MZSHIrJ-Iwg"}
+        {"access_token":"BQA5nJE0LyZyvhokO45vcfsNT_0WaqP5OjeN8uyBMBwaghfOgH50R7qVg2lYv6SHsoV0MSTr9Gwd_hk3e4UE3g_vEIzda8fjCw_1K656prce7Z6giCtgfgXDJx425R0P0U0XNy5nicqiosXHu9ezf44_","refresh_token":"AQDFOUiLtLtf5ZFGZb2WUGn6ysmSzahEDUyiQIcgzFJOVhVeUqH7E9LYP7stFNVW-04znyjBqDpw9OrM8eSF28GqGs2BWT3OplkjYgy0WatWkg_EuEnSpb7JGHMQKyt7csY"}
     );
 
     cb && cb(user);

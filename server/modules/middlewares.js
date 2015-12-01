@@ -22,8 +22,8 @@ Middlewares.auth = function() {
             req.user = user;
         }
         else {
-            //user = users.create();
-            user = users.createDebug();
+            user = users.create();
+            //user = users.createDebug();
 
             req.user = user;
             res.cookie(COOKIE_NAME, user._id);

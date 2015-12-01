@@ -8,103 +8,100 @@ var Errors = require('./../modules/errors');
 
 var platformParams = {
     client_id: '167545',
-    client_secret: '0d586be94448b8322fc9e387c2f05ee0',
-    authorizeUrl: 'https://connect.deezer.com/oauth/auth.php',
-    getTokenUrl: 'https://connect.deezer.com/oauth/access_token.php',
-    authorizations: 'basic_access,email'
+    client_secret: '0d586be94448b8322fc9e387c2f05ee0'
 };
-
 class Deezer extends Connector {
 
     get infos () {
 
         return {
             name: 'Deezer',
-            serviceId: 'deezer'
+            serviceId: 'deezer',
+            oauthOptions: {
+                authorizeUrl: 'https://connect.deezer.com/oauth/auth.php',
+                tokenUrl: 'https://connect.deezer.com/oauth/access_token.php',
+                scope: 'basic_access,email'
+            }
         };
     }
 
-    askLogin(req, res, state) {
+    ////////////////////////
+    // Overrided methods
 
-        var perms = platformParams.authorizations;
-        res.redirect(platformParams.authorizeUrl + '?' +
-                     querystring.stringify({
-                         app_id: platformParams.client_id,
-                         perms: perms,
-                         redirect_uri: this.redirectUrl,
-                         state: state
-                     })
-        );
+    ////////////////////////
+    // OAuth
+
+    getLoginPageParams_s(state) {
+        return {
+            app_id: platformParams.client_id,
+            perms: this.infos.oauthOptions.scope,
+            redirect_uri: this.redirectUrl,
+            state: state
+        };
     }
 
-    authCallback(req, res) {
+    getTokenRequest_s(code) {
+        var url = this.infos.oauthOptions.tokenUrl;
+        url += '?';
+        url += querystring.stringify({
+            app_id: platformParams.client_id,
+            secret: platformParams.client_secret,
+            code: code,
+            output: 'json'
+        });
 
-        var self = this;
-
-        if(req.query.error) {
-            Errors.sendError(res, 'AUTH_ERROR', req.query.error);
-        }
-        else if (req.query.code) {
-
-            var code = req.query.code || null;
-
-            var authOptions = {
-                url: platformParams.getTokenUrl + '?' +
-                    querystring.stringify({
-                        app_id: platformParams.client_id,
-                        secret: platformParams.client_secret,
-                        code: code,
-                        output: 'json'
-                    }),
-                json: true
-            };
-
-            request.get(authOptions, function(error, response, body) {
-
-                if (!error && response.statusCode === 200) {
-
-                    var tokens = {
-                        access_token: body.access_token,
-                        expires: body.expires
-                    };
-
-                    req.user.setConnection(self, tokens);
-
-                    var options = {
-                        url: 'https://api.deezer.com/user/me',
-                        qs: { access_token: tokens.access_token },
-                        json: true
-                    };
-
-                    // use the access token to access the Spotify Web API
-                    request.get(options, function(error, response, body) {
-                        req.user.setUserInfo(self, body);
-                    });
-
-                    // we can also pass the token to the browser to make requests from there
-                    res.redirect('/');
-                } else {
-                    res.redirect('/#?error=spotifycallback');
-                }
-            });
-        }
-
+        return {
+            method: "GET",
+            url: url,
+            json: true
+        };
     }
 
-    getPlaylists (req, res) {
+    getConnectionData_s(body) {
+        return {
+            access_token: body.access_token,
+            expires: body.expires
+        };
+    }
+
+    getUserInfo_s(user, callback) {
+
+        var userConnection = user.getConnection(this);
 
         var options = {
-            url: 'https://api.spotify.com/v1/users/ehpys/playlists',
-            headers: { 'Authorization': 'Bearer ' + "" },
+            url: 'https://api.deezer.com/user/me',
+            qs: { access_token: userConnection.access_token },
             json: true
         };
 
         // use the access token to access the Spotify Web API
         request.get(options, function(error, response, body) {
-            console.log(body);
-            res.json(body);
+            callback(null, body);
         });
+    };
+
+    ////////////////////////
+    // Library
+
+    playlistListConverter_s(playlists) {
+        return playlists;
     }
+
+    getPlaylistList_s (user, callback) {
+
+        var userConnection = user.getConnection(this);
+
+        var options = {
+            url: 'https://api.spotify.com/v1/users/ehpys/playlists',
+            headers: { 'Authorization': 'Bearer ' + userConnection.access_token },
+            json: true
+        };
+
+        // use the access token to access the Spotify Web API
+        request.get(options, function(error, response, body) {
+            callback(null, body);
+        });
+    };
 }
 
 module.exports = Deezer;
