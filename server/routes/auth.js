@@ -48,7 +48,14 @@ AuthRouter.get('/refresh', function(req, res) {
 
 AuthRouter.get('/logout', function(req, res) {
 
-    req.serviceConnector.logout(req, res);
+    req.serviceConnector.logout(req.user, function(err) {
+        if(err) {
+            Logger.error("Logout error", err);
+        }
+        else {
+            res.send('Successfully logged out');
+        }
+    });
 });
 
 AuthRouter.get('/state', function(req, res) {

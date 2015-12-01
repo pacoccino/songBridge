@@ -15,16 +15,15 @@ Middlewares.auth = function() {
 
     return function (req, res, next) {
 
-        var authId = req.cookies[COOKIE_NAME];
-        var user = authId !== undefined ? users.getById(req.cookies[COOKIE_NAME]) : null;
+        var authId = req.cookies[COOKIE_NAME] || req.headers[COOKIE_NAME];
+        var user = authId !== undefined ? users.getById(authId) : null;
 
         if (user) {
-
             req.user = user;
         }
-
         else {
-            user = users.create();
+            //user = users.create();
+            user = users.createDebug();
 
             req.user = user;
             res.cookie(COOKIE_NAME, user._id);
@@ -41,9 +40,19 @@ Middlewares.connectors = function() {
 
         var serviceId = req.query['serviceId'];
 
+        if(!serviceId) {
+            next();
+            return;
+        }
+
         req.serviceConnector = Connectors.getConnector(serviceId) || null;
 
-        next();
+        if(!req.serviceConnector) {
+            Errors.sendError(res, 'UNKNOWN_SERVICE');
+        }
+        else {
+            next();
+        }
     };
 };
 
@@ -57,7 +66,23 @@ Middlewares.needConnector = function() {
             next();
         }
         else {
-            Errors.sendError(res, 'UNKNOWN_SERVICE');
+            Errors.sendError(res, 'NO_SERVICE_SPECIFIED');
+        }
+    }
+};
+
+// Connection availability middleware
+Middlewares.needConnection = function() {
+
+    return function(req, res, next) {
+
+        var connector = req.serviceConnector;
+        var user = req.user;
+        if (user.getConnection(connector)) {
+            next();
+        }
+        else {
+            Errors.sendError(res, 'AUTH_NOT_CONNECTED');
         }
     }
 };

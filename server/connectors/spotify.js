@@ -113,18 +113,23 @@ class Spotify extends Connector {
         });
     };
 
-    getPlaylists (req, res) {
+    playlistConverter_s(playlist) {
+        return playlist;
+    }
+
+    getPlaylists_s (user, callback) {
+
+        var userConnection = user.getConnection(this);
 
         var options = {
             url: 'https://api.spotify.com/v1/users/ehpys/playlists',
-            headers: { 'Authorization': 'Bearer ' + "" },
+            headers: { 'Authorization': 'Bearer ' + userConnection.access_token },
             json: true
         };
 
         // use the access token to access the Spotify Web API
         request.get(options, function(error, response, body) {
-            console.log(body);
-            res.json(body);
+            callback(null, body);
         });
     };
 }

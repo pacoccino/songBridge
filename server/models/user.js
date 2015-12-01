@@ -1,7 +1,9 @@
 var _ = require('lodash');
+var mongodb = require('mongodb');
+var ObjectId = mongodb.ObjectId;
 
 function User() {
-    this._id = _.uniqueId();
+    this._id = new ObjectId().toString();
 
     this.connections = {};
     this.userInfos = {};

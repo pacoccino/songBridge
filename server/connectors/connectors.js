@@ -14,6 +14,12 @@ Connectors.list.push(new Spotify());
 Connectors.list.push(new Deezer());
 Connectors.list.push(new SoundCloud());
 
+var addConnector = function(Connector) {
+  //TODO Add via here
+    var connector = new Connector();
+
+    Connectors.list[connector.infos.serviceId] = connector;
+};
 
 Connectors.getConnector = function(serviceId) {
 
