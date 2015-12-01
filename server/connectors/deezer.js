@@ -74,7 +74,6 @@ class Deezer extends Connector {
             json: true
         };
 
-        // use the access token to access the Spotify Web API
         request.get(options, function(error, response, body) {
             callback(null, body);
         });
@@ -97,7 +96,6 @@ class Deezer extends Connector {
             json: true
         };
 
-        // use the access token to access the Spotify Web API
         request.get(options, function(error, response, body) {
             callback(null, body);
         });

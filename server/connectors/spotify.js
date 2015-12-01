@@ -63,6 +63,9 @@ class Spotify extends Connector {
         };
     }
 
+    ////////////////////////
+    // Library
+
     getUserInfo_s(user, callback) {
 
         var userConnection = user.getConnection(this);
@@ -73,14 +76,10 @@ class Spotify extends Connector {
             json: true
         };
 
-        // use the access token to access the Spotify Web API
         request.get(options, function(error, response, body) {
             callback(null, body);
         });
     };
-
-    ////////////////////////
-    // Library
 
     playlistListConverter_s(playlists) {
         return playlists;
@@ -96,9 +95,20 @@ class Spotify extends Connector {
             json: true
         };
 
-        // use the access token to access the Spotify Web API
         request.get(options, function(error, response, body) {
-            callback(null, body);
+            if(error) {
+                return callback(error);
+            }
+            var playlists_s = body.items;
+            var playlists = [];
+            playlists_s.forEach(function(playlist) {
+                playlists.push({
+                    id: playlist.id,
+                    name: playlist.name
+                });
+            });
+
+            callback(null, playlists);
         });
     };
 }
