@@ -12,7 +12,7 @@
     "karma-junit-reporter": "^0.2.2"
   },
   "scripts": {
-    "postinstall": "./node_modules/.bin/bower update",
+    "postinstall": "bower update && gulp sass",
     "start": "node server/app.js"
   },
   "dependencies": {
@@ -23,8 +23,10 @@
     "gulp": "^3.9.0",
     "gulp-sass": "^2.1.0",
     "lodash": "^3.10.1",
+    "mongodb": "^2.0.49",
     "mongoose": "^4.2.2",
     "querystring": "~0.2.0",
-    "request": "~2.34.0"
+    "request": "~2.34.0",
+    "winston": "^2.1.1"
   }
 }
