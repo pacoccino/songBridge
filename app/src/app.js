@@ -38,20 +38,16 @@ app.config(function($mdThemingProvider, $mdIconProvider, $routeProvider){
 
 
     $routeProvider
-        .when('/main', {
-            controller: 'MainController',
-            templateUrl:'src/views/main/main.html'
-        })
         .when('/platform', {
             controller: 'PlatformController',
             templateUrl:'src/views/Platform/platform.html'
         })
-        .when('/boby', {
+        .when('/main', {
             controller: 'BobyController',
             templateUrl:'src/views/Boby/bobyView.html'
         })
         .otherwise({
-          redirectTo: '/boby'
+          redirectTo: '/main'
         });
 
 });
