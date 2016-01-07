@@ -6,37 +6,31 @@ var Spotify = require('./spotify');
 var Deezer = require('./deezer');
 var SoundCloud = require('./soundcloud');
 
+var connectorClasses = [
+    Spotify,
+    SoundCloud,
+    Deezer
+];
+
 var Connectors = {};
 
-Connectors.list = [];
+Connectors.list = {};
 
-Connectors.list.push(new Spotify());
-Connectors.list.push(new Deezer());
-Connectors.list.push(new SoundCloud());
-
-var addConnector = function(Connector) {
-  //TODO Add via here
-    var connector = new Connector();
+for (var i = 0; i < connectorClasses.length; i++) {
+    var connectorClass = connectorClasses[i];
+    var connector = new connectorClass();
 
     Connectors.list[connector.infos.serviceId] = connector;
-};
+}
 
 Connectors.getConnector = function(serviceId) {
 
-    return _.find(Connectors.list, function(connector) {
-        return connector.infos.serviceId === serviceId;
-    });
+    return Connectors.list[serviceId];
 };
 
 Connectors.getConnectorsList = function() {
 
-    var connectors = [];
-
-    _.forEach(Connectors.list, function(connector) {
-        connectors.push(connector.infos);
-    });
-
-    return connectors;
+    return Object.keys(Connectors.list);
 };
 
 module.exports = Connectors;

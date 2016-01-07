@@ -5,14 +5,14 @@ var request = require('request'); // "Request"
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var Config = require('./config/config');
+var Config = require('./modules/config');
 
 var ApiRouter = require('./routes/router');
 var Middlewares = require('./modules/middlewares');
 
 var app = express();
 
-app.set('port', (Config.port || process.env.PORT || 8080));
+app.set('port', Config.port);
 
 app.use(cookieParser());
 //app.use(bodyParser.json());

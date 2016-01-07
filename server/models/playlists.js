@@ -1,6 +1,7 @@
 class Playlists {
 
     constructor() {
+        this.playlists = [];
     }
 
     get(playlistId) {
