@@ -16,6 +16,8 @@ User.prototype.setConnection = function(service, tokens) {
 
 User.prototype.getConnection = function(service) {
 
+    if(!service) return null;
+
     return this.connections[service.infos.serviceId];
 };
 

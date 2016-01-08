@@ -2,7 +2,7 @@
 var request = require('request');
 var querystring = require('querystring');
 
-var Config = require('../config/config');
+var Config = require('../modules/config');
 var Errors = require('./../modules/errors');
 
 /**
@@ -24,8 +24,7 @@ class Connector {
         return {
             name: 'undefined',
             serviceId: 'undefined',
-            oauthOptions: {
-            }
+            oauthOptions: {}
         };
     };
 
@@ -70,37 +69,6 @@ class Connector {
                 res.redirect('/');
             } else {
 
-            }
-        });
-    };
-
-
-    refreshToken(req, res) {
-
-        var self = this;
-        var tokens = req.user.getConnection(self, tokens);
-        var refresh_token = tokens.refresh_token;
-
-        var authOptions = {
-            url: 'https://accounts.spotify.com/api/token',
-            headers: { 'Authorization': 'Basic ' + (new Buffer(platformParams.client_id + ':' + platformParams.client_secret).toString('base64')) },
-            form: {
-                grant_type: 'refresh_token',
-                refresh_token: refresh_token
-            },
-            json: true
-        };
-
-        request.post(authOptions, function(error, response, body) {
-            if (!error && response.statusCode === 200) {
-
-                var access_token = body.access_token;
-
-                req.user.refreshToken(self, access_token);
-
-                res.send({
-                    'access_token': access_token
-                });
             }
         });
     };

@@ -1,7 +1,7 @@
 "use strict";
 var request = require('request');
 
-var Config = require('../config/config');
+var Config = require('../modules/config');
 var Connector = require('./connector');
 
 var platformParams = {
@@ -62,6 +62,36 @@ class Spotify extends Connector {
             refresh_token: body.refresh_token
         };
     }
+
+    refreshToken(req, res) {
+
+        var self = this;
+        var tokens = req.user.getConnection(self);
+        var refresh_token = tokens.refresh_token;
+
+        var authOptions = {
+            url: this.infos.oauthOptions.tokenUrl,
+            headers: { 'Authorization': 'Basic ' + (new Buffer(platformParams.client_id + ':' + platformParams.client_secret).toString('base64')) },
+            form: {
+                grant_type: 'refresh_token',
+                refresh_token: refresh_token
+            },
+            json: true
+        };
+
+        request.post(authOptions, function(error, response, body) {
+            if (!error && response.statusCode === 200) {
+
+                var access_token = body.access_token;
+
+                req.user.refreshToken(self, access_token);
+
+                res.send({
+                    'access_token': access_token
+                });
+            }
+        });
+    };
 
     ////////////////////////
     // Library

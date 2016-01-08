@@ -2,7 +2,7 @@
 var querystring = require('querystring');
 var request = require('request');
 
-var Config = require('../config/config');
+var Config = require('../modules/config');
 var Connector = require('./connector');
 var Errors = require('./../modules/errors');
 
