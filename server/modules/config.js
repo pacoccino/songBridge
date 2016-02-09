@@ -9,4 +9,10 @@ var Config = {
 
 Config.host = Config.protocol + '://' + Config.hostname + (Config.port && !Config.proxied ? (':' + Config.port) : '');
 
+Config.services = {
+    soundcloud: {
+        client_id: ""
+    }
+};
+
 module.exports = Config;
