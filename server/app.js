@@ -24,5 +24,5 @@ app.use('/api', ApiRouter);
 
 app.use(express.static(__dirname + '/../app'));
 
-console.log('Listening on '+app.get('port'));
+console.log('Listening on '+ app.get('port'));
 app.listen(app.get('port'));

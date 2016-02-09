@@ -1,11 +1,12 @@
 var defaultConfig = require('../config.json');
 
 var Config = {
-    protocol: defaultConfig.protocol,
-    hostname: defaultConfig.hostname,
-    port: process.env.PORT || defaultConfig.port
+    protocol: defaultConfig.protocol || 'http',
+    hostname: process.env.HOST || defaultConfig.hostname || 'localhost',
+    proxied: process.env.PROXIED || false,
+    port: process.env.PORT || defaultConfig.port || 8080
 };
 
-Config.host = Config.protocol + '://' + Config.hostname + (Config.port ? (':' + Config.port) : '');
+Config.host = Config.protocol + '://' + Config.hostname + (Config.port && !Config.proxied ? (':' + Config.port) : '');
 
 module.exports = Config;
