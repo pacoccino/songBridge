@@ -1,13 +1,16 @@
-var _ = require('lodash');
+"use strict";
 
-var Lobby = require('../scmodels/lobby');
+var _ = require('lodash');
+var async = require('async');
 
 // TODO mieux gerer les erreurs, quand s'arreter ?
 
 class LobbyCrawler {
-    constructor(soundcloud, cacheWrapper) {
-        this.soundCloud = soundcloud;
-        this.cacheWrapper = cacheWrapper;
+    constructor(soundcloud, cache, users, lobbies) {
+        this.soundcloud = soundcloud;
+        this.cache = cache;
+        this.users = users;
+        this.lobbies = lobbies;
     }
 
     updateLobby(lobby, callback) {
@@ -18,6 +21,8 @@ class LobbyCrawler {
 
             self.getLastArtistSongs(artistId, function(err, artistTracks) {
 
+                if(err) return callback(err);
+
                 tracks = tracks.concat(artistTracks);
 
                 artistCallback();
@@ -27,7 +32,9 @@ class LobbyCrawler {
 
             tracks = self.sortTracks(tracks);
 
-            self.updateLobbyTracks(lobby, tracks, function(updateError) {
+            var trackIds = _.map(tracks, 'id');
+
+            self.updatePlaylistTracks(lobby, trackIds, function(updateError) {
                 if(updateError) return callback(updateError);
 
                 callback(null);
@@ -35,13 +42,13 @@ class LobbyCrawler {
         });
     }
 
-    updateLobbyTracks(lobby, tracks, callback) {
+    updatePlaylistTracks(lobby, tracks, callback) {
+        var self = this;
 
-        User.findById(lobby.sc_id_user, function(err, user) {
+        self.users.findById(lobby.sc_id_user, function(err, user) {
             if(err) return callback(err);
 
-            var trackIds = _.map(tracks, 'id');
-            this.soundCloud.updatePlaylist(lobby.sc_id_playlist, user, trackIds, function(updateErr) {
+            self.soundcloud.updatePlaylist(lobby.sc_id_playlist, user, tracks, function(updateErr) {
                 if(updateErr) return callback(updateErr);
 
                 callback(null);
@@ -49,52 +56,69 @@ class LobbyCrawler {
         });
     }
 
+    getLastArtistSongsNoCache(artistId, callback) {
+        var self = this;
+        var options = {
+            n: 20,
+            offset: 0
+        };
+
+        self.soundcloud.getLastArtistSongs(artistId, options, function(err, lastSCTracks) {
+            if(err) return callback(err);
+
+            var lastTracks = _.map(lastSCTracks, function(scTrack) {
+                var track = {
+                    id: scTrack.id
+                };
+
+                track.timestamp = self.soundcloud.getTimestamp(scTrack);
+
+                return track;
+            });
+
+            callback(null, lastTracks);
+        });
+    }
+
     getLastArtistSongs(artistId, callback) {
+        var self = this;
         // TODO redis, async
-        this.cacheWrapper.get('artist_songs:' + artistId, function(cacheErr, lastSongs) {
+        self.cache.get('artist_songs:' + artistId, function(cacheErr, lastSongs) {
             if(cacheErr) return callback(cacheErr);
 
             if(lastSongs) {
                 callback(null, lastSongs);
             }
             else {
-                var options = {
-                    n: 20,
-                    offset: 0
-                };
+                self.getLastArtistSongsNoCache(artistId, function(getError, fetchedTracks) {
+                    if(getError) return callback(getError);
 
-                var lastSCTracks = this.soundCloud.getLastArtistSongs(artistId, options);
-
-                var lastTracks = _.map(lastSCTracks, function(scTrack) {
-                    var track = {
-                        id: scTrack.id,
-                        timestamp: scTrack.timestamp // ???
+                    var options = {
+                        expiration: 180 // 3 minutes
                     };
 
-                    return track;
+                    self.cache.set('artist_songs:'+artistId, fetchedTracks, options, function(setCacheErr) {
+                        if(setCacheErr) return callback(setCacheErr);
+
+                        callback(null, fetchedTracks);
+                    });
                 });
-
-                var expiration = 200;
-
-                this.cacheWrapper.set('artist_songs:'+artistId, lastTracks, expiration);
-
-                callback(null, lastSongs);
             }
         });
     }
 
     sortTracks(tracks) {
-        return _.sort(tracks, 'timestamp');
+        return _.sortBy(tracks, 'timestamp');
     }
 
     crawlLobbies(callback) {
         var self = this;
         var limitLobbies = 10;
 
-        Lobby.find({}, function onLobbies(err, lobbies) {
+        this.lobbies.find({}, function onLobbies(err, lobbies) {
             if(err) return callback(err);
 
-            async.eachLimit(lobbies, limitLobbies, self.updateLobby, function(lobbyErr) {
+            async.eachLimit(lobbies, limitLobbies, self.updateLobby.bind(self), function(lobbyErr) {
                 if(lobbyErr) return callback(lobbyErr);
 
                 callback(null);

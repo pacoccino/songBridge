@@ -1,0 +1,16 @@
+l1: a1 a2 a3
+l2: a2 a3
+l3: a1 a4
+
+a1: l1 l3
+a2: l1 l2
+a3: l1 l2
+a4: l3
+
+l1 a1
+l1 a2
+l1 a3
+l2 a2
+l2 a3
+l3 a1
+l3 a4

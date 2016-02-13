@@ -1,4 +1,4 @@
-var Connector = require('server/connectors/connector');
+var Connector = require('../../server/connectors/connector');
 
 var connector;
 

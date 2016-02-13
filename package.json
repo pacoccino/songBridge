@@ -8,12 +8,15 @@
     "node": ">=4.0"
   },
   "devDependencies": {
+    "istanbul": "^0.4.2",
     "karma": "~0.10",
     "karma-junit-reporter": "^0.2.2"
   },
   "scripts": {
     "postinstall": "bower update && gulp sass",
-    "start": "node server/app.js"
+    "start": "node server/app.js",
+    "test": "mocha test/specs/**/*.js",
+    "cover": "istanbul cover _mocha -- test/specs/**/*.js"
   },
   "dependencies": {
     "body-parser": "^1.14.1",
