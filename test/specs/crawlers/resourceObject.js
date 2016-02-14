@@ -42,4 +42,17 @@ describe('ResourceObject', function() {
             done();
         });
     });
+
+    it('append endpoint', function () {
+        resourceObject.appendResource("a", 1);
+        expect(resourceObject.resource).to.equal("a");
+        expect(resourceObject.resourceId).to.equal(1);
+        expect(resourceObject.subResource).to.equal(null);
+        expect(resourceObject.subResourceId).to.equal(null);
+        resourceObject.appendResource("b", 2);
+        expect(resourceObject.resource).to.equal("a");
+        expect(resourceObject.resourceId).to.equal(1);
+        expect(resourceObject.subResource).to.equal("b");
+        expect(resourceObject.subResourceId).to.equal(2);
+    });
 });

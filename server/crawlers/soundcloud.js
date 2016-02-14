@@ -2,8 +2,6 @@
 
 var _ = require('lodash');
 
-var Config = require('../modules/config');
-
 var ResourceObject = require('./resourceObject');
 
 // TODO
@@ -16,8 +14,8 @@ class SoundCloud {
         this.http = http;
     }
 
-    newRequest(user) {
-        return new ResourceObject(this, user);
+    newRequest(userToken) {
+        return new ResourceObject(this, userToken);
     }
 
     static isPrivateRequest(requestData) {
@@ -49,7 +47,10 @@ class SoundCloud {
     }
 
     static isValidRequest(request) {
-        if(request.resource === "users") {
+        if(request.resource === "users" || request.resource === "me") {
+            if(request.resource !== "me" && !request.resourceId) {
+                return false;
+            }
             if(!request.subResource) {
                 return true;
             }
@@ -89,8 +90,7 @@ class SoundCloud {
 
         var params = {};
         if(SoundCloud.isPrivateRequest(request)) {
-            var token = request.asUser.auth.token;
-            params.secret_token = token;
+            params.secret_token = request.userToken;
         }
         else {
             params.client_id = this.options.client_id;
@@ -104,8 +104,8 @@ class SoundCloud {
         var options = {
             url: url,
             method: request.requestType,
-            params: params,
-            data: data
+            qs: params,
+            body: data
         };
 
         // todo post

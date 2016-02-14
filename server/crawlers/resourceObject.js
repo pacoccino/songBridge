@@ -1,13 +1,13 @@
 "use strict";
 
 class ResourceObject {
-    constructor(connector, asUser) {
+    constructor(connector, userToken) {
         this.resource = null;
         this.resourceId = null;
         this.subResource = null;
         this.subResourceId = null;
         this.connector = connector;
-        this.asUser = asUser;
+        this.userToken = userToken || null;
     }
 
     requestFull() {
@@ -48,11 +48,12 @@ class ResourceObject {
     users(userId) {
         return this.appendResource("users", userId);
     }
-
+    me() {
+        return this.appendResource("me");
+    }
     playlists(playlistId) {
         return this.appendResource("playlists", playlistId);
     }
-
     tracks(trackId) {
         return this.appendResource("tracks", trackId);
     }
@@ -66,9 +67,6 @@ class ResourceObject {
     get(callback) {
         if(!this.isResource() && !this.isSubResource()) {
             throw "Empty get request";
-        }
-        if (this.resourceId === null) {
-            throw "Please specify resource id"
         }
         this.requestType = "GET";
 

@@ -11,7 +11,8 @@ Config.host = Config.protocol + '://' + Config.hostname + (Config.port && !Confi
 
 Config.services = {
     soundcloud: {
-        client_id: ""
+        client_id: process.env.SC_CLIENT_ID || "",
+        api_url: "https://api.soundcloud.com/"
     }
 };
 
