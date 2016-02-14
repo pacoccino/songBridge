@@ -10,7 +10,7 @@ var trackMock = require('../../mocks/soundcloud/track.json');
 
 // TODO spy on sinon
 var lobbyCrawler;
-describe.only('LobbyCrawler', function() {
+describe('LobbyCrawler', function() {
 
     beforeEach(function () {
         lobbyCrawler = new LobbyCrawler(soundcloudMock, cacheMock, usersMock, lobbiesMock);
