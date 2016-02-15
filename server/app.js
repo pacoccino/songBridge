@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var Config = require('./modules/config');
 
 var ApiRouter = require('./routes/router');
+var AppRouter = require('./routes/app');
 var Middlewares = require('./modules/middlewares');
 
 var app = express();
@@ -22,7 +23,8 @@ app.use(Middlewares.connectors());
 
 app.use('/api', ApiRouter);
 
-app.use(express.static(__dirname + '/../app'));
+app.use('/app', AppRouter);
+app.use(express.static(__dirname + '/../landing'));
 
 console.log('Listening on '+ app.get('port'));
 app.listen(app.get('port'));
