@@ -3,7 +3,7 @@
  */
 var expect = require('chai').expect;
 
-var ResourceObject = require('../../../server/crawlers/resourceObject')
+var ResourceObject = require('../../../server/connectors/resourceObject')
 var connectorMock = require('../../mocks/connectorMock');
 
 var resourceObject;

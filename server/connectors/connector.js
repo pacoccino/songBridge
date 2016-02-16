@@ -4,8 +4,12 @@ var _ = require('lodash');
 
 var ResourceObject = require('./resourceObject');
 
-class SoundCloud {
+class Connector {
+
     constructor(options, http) {
+        if(new.target.name === "Connector") // On the edge ^_^
+            throw "Connector shouldnt be instanciated (abstract)";
+
         this.options = options;
         this.http = http;
     }
@@ -14,6 +18,10 @@ class SoundCloud {
         return new ResourceObject(this, userToken);
     }
 
+    //@abstract
+    endRequest(request, callback) {
+        throw "Not implemented";
+    }
     //@abstract
     buildApiUrl(requestData) {
 
@@ -36,16 +44,6 @@ class SoundCloud {
         }
         return url;
     }
-
-    //@abstract
-    static isValidRequest(request) {
-        return true:
-    }
-
-    //@abstract
-    endRequest(request, callback) {
-        throw "Not implemented";
-    }
 }
 
-module.exports = SoundCloud;
+module.exports = Connector;

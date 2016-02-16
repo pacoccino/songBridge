@@ -9,11 +9,17 @@ var Connector = require('./connector');
 // resolver
 
 class SoundCloud extends Connector {
+
     constructor(options, http) {
         super(options, http)
     }
 
-    //@overriden
+    static isPrivateRequest(requestData) {
+        if(requestData.resource === "me") return true;
+
+        return (requestData.requestType !== "GET");
+    }
+
     static isValidRequest(request) {
         if(request.resource === "users" || request.resource === "me") {
             if(request.resource !== "me" && !request.resourceId) {
@@ -50,7 +56,7 @@ class SoundCloud extends Connector {
         return false;
     }
 
-    //@overriden
+    //@override
     endRequest(request, callback) {
         if(!SoundCloud.isValidRequest(request)) {
             throw "Not valid request";

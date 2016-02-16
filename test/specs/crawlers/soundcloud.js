@@ -1,6 +1,6 @@
 var expect = require('chai').expect;
 
-var Soundcloud = require('../../../server/crawlers/soundcloud')
+var Soundcloud = require('../../../server/connectors/soundcloud')
 
 var httpMock = require('../../mocks/httpMock');
 
