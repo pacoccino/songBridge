@@ -2,7 +2,7 @@
 var request = require('request');
 
 var Config = require('../modules/config');
-var Connector = require('./connector');
+var Connector = require('./oldConnector');
 
 var platformParams = {
     client_id: '29301ecd40bc431096167df74fd4937c',

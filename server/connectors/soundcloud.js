@@ -1,105 +1,112 @@
 "use strict";
-var querystring = require('querystring');
-var request = require('request');
 
-var Config = require('../modules/config');
+var _ = require('lodash');
+
 var Connector = require('./connector');
-var Errors = require('./../modules/errors');
 
-var platformParams = {
-    client_id: 'bf005413b19842fbf55e6aac73687ac8',
-    client_secret: '5262675c6e05173bd512c542c3ba05bb'
-};
+// TODO
+// compact representation
+// resolver
 
 class SoundCloud extends Connector {
+    constructor(options, http) {
+        super(options, http)
+    }
 
-    get infos () {
-
-        return {
-            name: 'SoundCloud',
-            serviceId: 'soundcloud',
-            oauthOptions: {
-                authorizeUrl: 'https://soundcloud.com/connect',
-                tokenUrl: 'https://api.soundcloud.com/oauth2/token',
-                scope: 'non-expiring'
+    //@overriden
+    static isValidRequest(request) {
+        if(request.resource === "users" || request.resource === "me") {
+            if(request.resource !== "me" && !request.resourceId) {
+                return false;
             }
-        };
+            if(!request.subResource) {
+                return true;
+            }
+            if(request.subResource === "playlists") {
+                return true;
+            }
+            if(request.subResource === "tracks") {
+                return true;
+            }
+            if(request.subResource === "favorites") {
+                return true;
+            }
+            if(request.subResource === "followings") {
+                return true;
+            }
+        }
+        if(request.resource === "playlists") {
+            if(request.subResource) {
+                return false;
+            }
+            return true;
+        }
+        if(request.resource === "tracks") {
+            if(request.subResource) {
+                return false;
+            }
+            return true;
+        }
+        return false;
     }
 
-    ////////////////////////
-    // Overrided methods
+    //@overriden
+    endRequest(request, callback) {
+        if(!SoundCloud.isValidRequest(request)) {
+            throw "Not valid request";
+        }
+        var url = this.buildApiUrl(request);
 
-    ////////////////////////
-    // OAuth
+        var params = {};
+        if(SoundCloud.isPrivateRequest(request)) {
+            params.secret_token = request.userToken;
+        }
+        else {
+            params.client_id = this.options.client_id;
+        }
 
-    getLoginPageParams_s(state) {
-        return {
-            client_id: platformParams.client_id,
-            redirect_uri: this.redirectUrl,
-            response_type: 'code',
-            scope: this.infos.oauthOptions.scope,
-            display: "",
-            state: state
-        };
-    }
-
-    getTokenRequest_s(code) {
-        return {
-            method: "POST",
-            url: this.infos.oauthOptions.tokenUrl,
-            form: {
-                client_id: platformParams.client_id,
-                client_secret: platformParams.client_secret,
-                code: code,
-                redirect_uri: this.redirectUrl,
-                grant_type: 'authorization_code'
-            },
-            json: true
-        };
-    }
-
-    getConnectionData_s(body) {
-        return {
-            access_token: body.access_token
-        };
-    }
-
-    getUserInfo_s(user, callback) {
-
-        var userConnection = user.getConnection(this);
+        var data = null;
+        if(request.requestData) {
+            data = request.requestData;
+        }
 
         var options = {
-            url: 'https://api.soundcloud.com/me',
-            qs: { oauth_token: userConnection.access_token },
-            json: true
+            url: url,
+            method: request.requestType,
+            qs: params,
+            body: data
         };
 
-        request.get(options, function(error, response, body) {
-            callback(null, body);
+        // todo post
+        this.http(options, function(error, response, body) {
+            callback(error, body);
         });
-    };
-
-    ////////////////////////
-    // Library
-
-    playlistListConverter_s(playlists) {
-        return playlists;
     }
 
-    getPlaylistList_s (user, callback) {
+    addToPlaylist(playlistId, user, tracks, callback) {
+        // TODO unshift
 
-        var userConnection = user.getConnection(this);
+        var self = this;
+        var getRequest = self.newRequest();
+        getRequest.playlists(playlistId).get(function(err, playlist) {
+            if(err) return callback(err);
 
-        var options = {
-            url: 'https://api.spotify.com/v1/users/ehpys/playlists',
-            headers: { 'Authorization': 'Bearer ' + userConnection.access_token },
-            json: true
-        };
+            var playlistTracks = _.map(playlist.tracks, 'id');
+            var newPlaylistTracks = playlistTracks.concat(tracks);
+            newPlaylistTracks = _.map(newPlaylistTracks, function(trackId) {
+                return {id: trackId}
+            });
 
-        request.get(options, function(error, response, body) {
-            callback(null, body);
-        });
-    };
+            var putData = {
+                tracks: newPlaylistTracks
+            };
+            var putRequest = self.newRequest(user);
+            putRequest.playlists(playlistId).put(putData, function(putErr) {
+                callback(putErr);
+            });
+
+        })
+    }
 }
 
 module.exports = SoundCloud;

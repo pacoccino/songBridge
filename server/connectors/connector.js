@@ -1,101 +1,51 @@
 "use strict";
-var request = require('request');
-var querystring = require('querystring');
 
-var Config = require('../modules/config');
-var Errors = require('./../modules/errors');
+var _ = require('lodash');
 
-/**
- * Service connector base abstract class
- *
- * This class is not intended to be instanciated,
- * as most of methods are not really implemented here,
- * but there are not abstract classes in ES6
- */
-class Connector {
+var ResourceObject = require('./resourceObject');
 
-    constructor() {
-        if(new.target.name === "Connector") // On the edge ^_^
-            throw "Connector shouldnt be instanciated (abstract)";
+class SoundCloud {
+    constructor(options, http) {
+        this.options = options;
+        this.http = http;
     }
 
-    get infos () {
+    newRequest(userToken) {
+        return new ResourceObject(this, userToken);
+    }
 
-        return {
-            name: 'undefined',
-            serviceId: 'undefined',
-            oauthOptions: {}
-        };
-    };
+    //@abstract
+    buildApiUrl(requestData) {
 
-    get redirectUrl () {
+        var url = this.options.api_url;
+        url += requestData.resource;
 
-        var redirect_uri = Config.host + '/api/auth/callback?serviceId=' + this.infos.serviceId;
-        return redirect_uri;
-    };
+        if(requestData.resourceId) {
+            url += "/";
+            url += requestData.resourceId;
 
+            if (requestData.subResource) {
+                url += "/";
+                url += requestData.subResource;
 
-    askLogin(req, res, state) {
-
-        var url = this.infos.oauthOptions.authorizeUrl;
-        var getParams = this.getLoginPageParams_s(state);
-
-        res.redirect(url + '?' + querystring.stringify(getParams));
-    };
-
-    authCallback(req, res) {
-
-        if(req.query.error) {
-            Errors.sendError(res, "AUTH_ERROR", req.query.error_description);
-            return;
-        }
-
-        var self = this;
-        var code = req.query.code || null;
-
-        var requestObject = this.getTokenRequest_s(code);
-
-        request(requestObject, function(error, response, body) {
-            if (!error && response.statusCode === 200) {
-
-                var connectionData = self.getConnectionData_s(body);
-
-                req.user.setConnection(self, connectionData);
-
-                self.getUserInfo_s(req.user, function(userInfo) {
-                    req.user.setUserInfo(self, body);
-                });
-
-                res.redirect('/');
-            } else {
-
+                if (requestData.subResourceId) {
+                    url += "/";
+                    url += requestData.subResourceId;
+                }
             }
-        });
-    };
+        }
+        return url;
+    }
 
-    logout(user, cb) {
+    //@abstract
+    static isValidRequest(request) {
+        return true:
+    }
 
-        user.unsetConnection(this);
-        cb(null);
-    };
-
-
-    getPlaylistList (user, cb) {
-
-        this.getPlaylistList_s(user, function(err, playlists_s) {
-            cb(err, playlists_s);
-        })
-    };
-
-    /////////////////////////////////////////////////
-    // Abstract methods to override
-
-    getLoginPageParams_s() {}
-    getTokenRequest_s() {}
-    getConnectionData_s() {}
-    getUserInfo_s() {}
-    playlistListConverter_s() {}
-    getPlaylistList_s() {}
+    //@abstract
+    endRequest(request, callback) {
+        throw "Not implemented";
+    }
 }
 
-module.exports = Connector;
+module.exports = SoundCloud;

@@ -3,7 +3,7 @@ var querystring = require('querystring');
 var request = require('request');
 
 var Config = require('../modules/config');
-var Connector = require('./connector');
+var Connector = require('./oldConnector');
 var Errors = require('./../modules/errors');
 
 var platformParams = {
