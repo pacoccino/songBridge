@@ -1,5 +1,16 @@
 {
   "protocol": "http",
   "hostname": "localhost",
-  "port": 8080
+  "port": 8080,
+  "web_port": 8080,
+  "api_port": 3000,
+  "proxied": false,
+  "staticFolder": "../../app",
+
+  "services": {
+    "soundcloud": {
+      "client_id": "",
+      "client_secret": ""
+    }
+  }
 }

@@ -11,6 +11,8 @@ AuthRouter.get('/', function(req,res) {
     res.send('auth ok')}
 );
 
+AuthRouter.use(Middlewares.auth());
+AuthRouter.use(Middlewares.connectors());
 AuthRouter.use(Middlewares.needConnector());
 
 AuthRouter.get('/login', function(req, res) {

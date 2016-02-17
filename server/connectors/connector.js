@@ -14,6 +14,12 @@ class Connector {
         this.http = http;
     }
 
+    get config () {
+        return {
+            api_url: ''
+        };
+    }
+
     newRequest(userToken) {
         return new ResourceObject(this, userToken);
     }
@@ -25,7 +31,7 @@ class Connector {
     //@abstract
     buildApiUrl(requestData) {
 
-        var url = this.options.api_url;
+        var url = this.config.api_url;
         url += requestData.resource;
 
         if(requestData.resourceId) {

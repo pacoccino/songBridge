@@ -9,6 +9,8 @@ var LibRouter = express.Router({ params: 'inherit' });
 
 LibRouter.get('/', function(req,res) {res.send('library ok')});
 
+LibRouter.use(Middlewares.auth());
+LibRouter.use(Middlewares.connectors());
 LibRouter.use(Middlewares.needConnector());
 LibRouter.use(Middlewares.needConnection());
 

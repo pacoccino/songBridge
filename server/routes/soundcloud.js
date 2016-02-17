@@ -8,21 +8,16 @@ var Helpers = require('./../modules/helpers');
 var Errors = require('./../modules/errors');
 var Config = require('./../modules/config');
 var Middlewares = require('./../modules/middlewares');
-var SoundCloud = require('./../crawlers/soundcloud');
+var SoundCloud = require('./../connectors/soundcloud');
 
 var SoundcloudRouter = express.Router({ params: 'inherit' });
 
 var soundcloud = new SoundCloud(Config.services.soundcloud, request);
 
-SoundcloudRouter.use(passport.initialize());
-SoundcloudRouter.use(passport.session());
 
 SoundcloudRouter.get('/', function(req,res) {
     res.send('soundcloud ok')}
 );
-
-var SOUNDCLOUD_CLIENT_ID = "bf005413b19842fbf55e6aac73687ac8"
-var SOUNDCLOUD_CLIENT_SECRET = "5262675c6e05173bd512c542c3ba05bb";
 
 var users = [];
 
@@ -36,8 +31,8 @@ passport.deserializeUser(function(userId, done) {
 });
 
 passport.use(new SoundCloudStrategy({
-        clientID: SOUNDCLOUD_CLIENT_ID,
-        clientSecret: SOUNDCLOUD_CLIENT_SECRET,
+        clientID: Config.services.soundcloud.client_id,
+        clientSecret: Config.services.soundcloud.client_secret,
         callbackURL: "http://localhost:8080/api/soundcloud/callback",
         scope: "non-expiring"
     },
@@ -94,7 +89,7 @@ function ensureAuthenticated(req, res, next) {
 
 SoundcloudRouter.get('/get/:resource/:resourceId?/:subResource?/:subResourceId?', function(req,res) {
 
-    var userToken = req.query.token || req.cookies["SOUNDCLOUD_TOKEN"] || null;
+    var userToken = req.query.token || null;
 
     var scReq = soundcloud.newRequest(userToken);
     try {

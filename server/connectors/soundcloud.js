@@ -14,6 +14,13 @@ class SoundCloud extends Connector {
         super(options, http)
     }
 
+    get config () {
+
+        return {
+            api_url: 'https://api.soundcloud.com/'
+        };
+    }
+
     static isPrivateRequest(requestData) {
         if(requestData.resource === "me") return true;
 
@@ -83,8 +90,9 @@ class SoundCloud extends Connector {
             body: data
         };
 
-        // todo post
+
         this.http(options, function(error, response, body) {
+            // TODO catch error (body empty)
             callback(error, body);
         });
     }

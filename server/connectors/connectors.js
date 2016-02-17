@@ -8,7 +8,7 @@ var SoundCloud = require('./soundcloud');
 
 var connectorClasses = [
     Spotify,
-    SoundCloud,
+    //SoundCloud,
     Deezer
 ];
 
