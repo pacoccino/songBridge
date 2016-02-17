@@ -1,0 +1,124 @@
+* {
+  box-sizing: border-box; }
+
+.song-bridge {
+  height: 100%; }
+  .song-bridge .main-menu {
+    height: 100%;
+    display: flex; }
+  .song-bridge .platform-menu md-toolbar:not(.toolbar-header) {
+    background-color: #ff5500; }
+  .song-bridge .platform-menu .toolbar-service {
+    min-height: initial;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    height: 190px;
+    max-height: 300px; }
+    .song-bridge .platform-menu .toolbar-service .toolbar-service-detail .profile-header .picture {
+      width: 100px;
+      height: 100px;
+      margin: 5px; }
+    .song-bridge .platform-menu .toolbar-service .toolbar-service-detail .profile-header .resume {
+      padding-left: 10px; }
+      .song-bridge .platform-menu .toolbar-service .toolbar-service-detail .profile-header .resume h3 {
+        margin-top: 17px; }
+  .song-bridge .platform-menu .playlist-list md-list-item .playlist-item {
+    width: 100%; }
+  .song-bridge .application-frame .frame-content {
+    height: 100%; }
+  .song-bridge .application-frame .service-dashboard .service-card {
+    margin: 30px;
+    height: 300px;
+    cursor: pointer;
+    position: relative; }
+    .song-bridge .application-frame .service-dashboard .service-card .service-logo {
+      visibility: visible;
+      display: block;
+      max-width: 90%;
+      max-height: 90%;
+      width: auto;
+      height: auto; }
+    .song-bridge .application-frame .service-dashboard .service-card .service-card-detail {
+      visibility: hidden;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%; }
+    .song-bridge .application-frame .service-dashboard .service-card .service-card-split {
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5); }
+      .song-bridge .application-frame .service-dashboard .service-card .service-card-split md-icon {
+        margin: 10px; }
+      .song-bridge .application-frame .service-dashboard .service-card .service-card-split:hover {
+        background-color: rgba(255, 255, 255, 0.64); }
+    .song-bridge .application-frame .service-dashboard .service-card:hover .service-card-detail {
+      visibility: visible; }
+    .song-bridge .application-frame .service-dashboard .service-card.spotify {
+      background-color: #84bd00; }
+      .song-bridge .application-frame .service-dashboard .service-card.spotify:hover {
+        background-color: rgba(132, 189, 0, 0.3); }
+    .song-bridge .application-frame .service-dashboard .service-card.deezer {
+      background-color: #3a3a3a;
+      /*&:hover {
+            background-color: rgba(58, 58, 58, 0.3);
+          }*/ }
+    .song-bridge .application-frame .service-dashboard .service-card.soundcloud {
+      background-color: #ff5500; }
+      .song-bridge .application-frame .service-dashboard .service-card.soundcloud:hover {
+        background-color: rgba(255, 85, 0, 0.3); }
+  .song-bridge .application-frame .library-view md-whiteframe {
+    margin: 20px; }
+  .song-bridge .application-frame .library-view .library-table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    background-color: transparent;
+    width: 100%;
+    border-top: 1px solid #ddd; }
+    .song-bridge .application-frame .library-view .library-table thead tr th {
+      text-align: left;
+      padding: 12px 24px;
+      border-bottom: 1px solid #e7e8ea;
+      vertical-align: bottom; }
+    .song-bridge .application-frame .library-view .library-table tbody tr td {
+      padding: 12px 24px;
+      border-top: 1px solid #e7e8ea; }
+    .song-bridge .application-frame .library-view .library-table tbody .service-available {
+      width: 24px;
+      height: 24px;
+      min-height: 24px;
+      line-height: 24px;
+      font-size: 0.9em;
+      font-weight: 200; }
+      .song-bridge .application-frame .library-view .library-table tbody .service-available.soundcloud {
+        background-color: #ff5500; }
+      .song-bridge .application-frame .library-view .library-table tbody .service-available.spotify {
+        background-color: #84bd00; }
+      .song-bridge .application-frame .library-view .library-table tbody .service-available.deezer {
+        background-color: #3a3a3a; }
+      .song-bridge .application-frame .library-view .library-table tbody .service-available.unavailable {
+        background-color: #ddd !important; }
+  .song-bridge md-sidenav {
+    height: 100%; }
+
+.service-icon {
+  max-width: 24px;
+  max-height: 24px;
+  width: auto;
+  height: auto; }
+  .service-icon.si-m {
+    max-width: 36px;
+    max-height: 36px; }
+  .service-icon.si-l {
+    max-width: 48px;
+    max-height: 48px; }
+
+.service-detail-modal {
+  min-width: 400px;
+  max-width: 80%; }
+  .service-detail-modal md-toolbar h2 {
+    margin-left: 7px; }
+  .service-detail-modal .profile-header .picture {
+    margin: 3px; }
+  .service-detail-modal .profile-header .resume {
+    padding-left: 5px; }
