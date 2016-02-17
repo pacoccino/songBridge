@@ -18,4 +18,8 @@ Config.services = {
     }
 };
 
+Config.connections = {
+    mongoUrl: process.env.MONGO_URL || defaultConfig.connections.mongoUrl
+};
+
 module.exports = Config;

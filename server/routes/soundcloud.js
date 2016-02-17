@@ -104,6 +104,7 @@ SoundcloudRouter.get('/get/:resource/:resourceId?/:subResource?/:subResourceId?'
                 res.send(err);
             }
             else {
+                res.setHeader('Content-Type', 'application/json');
                 res.send(result)
             }
         });
