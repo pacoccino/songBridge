@@ -4,9 +4,9 @@ var express = require('express');
 var request = require('request');
 
 
-var Config = require('./modules/config');
+var Config = require('../modules/config');
 
-var ApiRouter = require('./routes/router');
+var ApiRouter = require('../routes/api');
 
 var app = express();
 

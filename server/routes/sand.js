@@ -5,12 +5,18 @@ var SandRouter = express.Router();
 
 SandRouter.get('/', function(req,res) {res.send('sand ok')});
 
+SandRouter.get('/aa', function(req, res) {
+
+    res.json(req.user);
+});
+
 SandRouter.get('/req/:param', function(req, res) {
 
     console.log("get");
     res.send(req.bla);
 
 });
+
 
 SandRouter.param('param', function(req, res, next, name) {
 
@@ -24,5 +30,6 @@ SandRouter.param('param', function(req, res, next, name) {
         next();
     }
 });
+
 
 module.exports = SandRouter;

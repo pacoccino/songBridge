@@ -6,7 +6,6 @@ var Errors = require('../modules/errors');
 
 var Middlewares = {};
 
-
 // Authorization middleware
 Middlewares.auth = function() {
     var users = new Users();

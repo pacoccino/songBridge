@@ -1,45 +1,50 @@
 var _ = require('lodash');
-var mongodb = require('mongodb');
-var ObjectId = mongodb.ObjectId;
+var mongoose = require('mongoose');
 
-function User() {
-    this._id = new ObjectId().toString();
+var connectionSchema = mongoose.Schema(
+    {
+        serviceId: {type: String, index: true},
+        userId: String,
+        tokens: {
+            access_token: String,
+            refresh_token: String,
+            timestamp: Date
+        }
+    },
+    {_id: false}
+);
 
-    this.connections = {};
-    this.userInfos = {};
-}
+var userSchema = mongoose.Schema(
+    {
+        connections: [connectionSchema]
+    },
+    {
+        strict: true
+    }
+);
 
-User.prototype.setConnection = function(service, tokens) {
+userSchema.methods = {
+    setConnection: function(service, tokens) {
 
-    this.connections[service.infos.serviceId] = tokens;
+        this.connections[service.infos.serviceId] = tokens;
+    },
+    getConnection: function(service) {
+
+        if(!service) return null;
+
+        return this.connections[service.infos.serviceId];
+    },
+    refreshToken: function(service, access_token) {
+
+        this.connections[service.infos.serviceId].access_token = access_token;
+    },
+    unsetConnection: function(service) {
+
+        delete this.connections[service.infos.serviceId];
+    }
 };
 
-User.prototype.getConnection = function(service) {
-
-    if(!service) return null;
-
-    return this.connections[service.infos.serviceId];
-};
-
-User.prototype.setUserInfo = function(service, infos) {
-
-    this.userInfos[service.infos.serviceId] = infos;
-};
-
-User.prototype.getUserInfo = function(service) {
-
-    return this.userInfos[service.infos.serviceId];
-};
-
-User.prototype.refreshToken = function(service, access_token) {
-
-    this.connections[service.infos.serviceId].access_token = access_token;
-};
-
-User.prototype.unsetConnection = function(service) {
-
-    delete this.connections[service.infos.serviceId];
-};
+var User = mongoose.model('User', userSchema);
 
 
 module.exports = User;

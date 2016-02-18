@@ -1,19 +1,16 @@
 var mongoose = require('mongoose');
 
-var userSchema = mongoose.Schema({
+var soundcloudUserSchema = mongoose.Schema({
         sc_id: {type: String, index: true},
-        auth: {
-            token: String,
-            refresh: String,
-            timestamp: Number
-        }
+        access_token: String
     },
     {
-        strict: true
+        strict: true,
+        _id: false
     }
 );
 
-userSchema.methods = {
+soundcloudUserSchema.methods = {
     updateToken: function(authData, callback) {
         var auth = this.auth;
         auth.token = authData.token;
@@ -21,6 +18,6 @@ userSchema.methods = {
     }
 };
 
-var User = mongoose.model('User', userSchema);
+var SoundCloudUser = mongoose.model('User', soundcloudUserSchema);
 
-module.exports = User;
+module.exports = SoundCloudUser;

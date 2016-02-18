@@ -6,7 +6,8 @@ var artistSchema = mongoose.Schema({
         lastFetchedSong: String
     },
     {
-        strict: true
+        strict: true,
+        _id: false
     }
 );
 

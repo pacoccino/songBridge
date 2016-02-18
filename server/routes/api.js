@@ -14,18 +14,20 @@ var AuthRouter = require('./auth');
 var LibRouter = require('./library');
 var SandRouter = require('./sand');
 var SCRouter = require('./soundcloud');
+var Authorization = require('../modules/authorization');
 
 
-AuthRouter.use(cookieParser());
-AuthRouter.use(bodyParser.json());
+ApiRouter.use(cookieParser());
+ApiRouter.use(bodyParser.json());
 
-AuthRouter.use(session({ secret: 'keyboard cat' , resave: false, saveUninitialized: false}));
-AuthRouter.use(passport.initialize());
-AuthRouter.use(passport.session());
+ApiRouter.use(session({ secret: 'keyboard cat' , resave: false, saveUninitialized: false}));
+ApiRouter.use(passport.initialize());
+ApiRouter.use(passport.session());
+Authorization.use(passport);
 
 ApiRouter.get('/', function(req,res) {res.send('api ok')});
-ApiRouter.use('/auth', AuthRouter);
-ApiRouter.use('/library', LibRouter);
+//ApiRouter.use('/auth', AuthRouter);
+//ApiRouter.use('/library', LibRouter);
 ApiRouter.use('/sand', SandRouter);
 ApiRouter.use('/soundcloud', SCRouter);
 
