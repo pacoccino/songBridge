@@ -13,19 +13,6 @@ Users.prototype.create = function() {
     return user;
 };
 
-Users.prototype.createDebug = function() {
-    var user = this.create();
-    user._id = 1;
-    user.setConnection(
-        {
-            infos : { serviceId: 'spotify'}
-        },
-        {"access_token":"BQA5nJE0LyZyvhokO45vcfsNT_0WaqP5OjeN8uyBMBwaghfOgH50R7qVg2lYv6SHsoV0MSTr9Gwd_hk3e4UE3g_vEIzda8fjCw_1K656prce7Z6giCtgfgXDJx425R0P0U0XNy5nicqiosXHu9ezf44_","refresh_token":"AQDFOUiLtLtf5ZFGZb2WUGn6ysmSzahEDUyiQIcgzFJOVhVeUqH7E9LYP7stFNVW-04znyjBqDpw9OrM8eSF28GqGs2BWT3OplkjYgy0WatWkg_EuEnSpb7JGHMQKyt7csY"}
-    );
-
-    return user;
-};
-
 Users.prototype.delete = function(userId) {
     if(!userId) return;
 
@@ -40,16 +27,15 @@ Users.prototype.getById = function(userId, serviceId) {
     var user;
 
     if(!serviceId) {
-        user = _.find(this.users, {_id: userId});
+        user = _.find(this.users, function(user) {
+            return (user._id.toString() === userId);
+        });
     }
     else {
         user = _.find(this.users, function(user) {
-            var serviceConnection = _.find(user.connections, {serviceId: serviceId});
+            var serviceConnection = user.getConnection(serviceId);
 
-            if(serviceConnection && serviceConnection.userId === userId) {
-                return true;
-            }
-            return false;
+            return (serviceConnection && serviceConnection.userId == userId);
         });
     }
 

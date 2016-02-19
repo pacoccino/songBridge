@@ -90,7 +90,6 @@ class SoundCloud extends Connector {
             body: data
         };
 
-
         this.http(options, function(error, response, body) {
             // TODO catch error (body empty)
             callback(error, body);

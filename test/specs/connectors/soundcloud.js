@@ -31,7 +31,7 @@ describe('Soundcloud', function() {
         httpMock.getBody = user;
 
         scReq.users(userId).get(function(err, result) {
-            expect(httpMock.getOptions.url).to.equal(options.api_url + "users/" + userId);
+            expect(httpMock.getOptions.url).to.equal(soundcloud.config.api_url + "users/" + userId);
             expect(httpMock.getOptions.qs.client_id).to.equal(options.client_id);
             expect(httpMock.getOptions.qs.secret_token).to.be.undefined;
             expect(err).to.be.null;
@@ -48,7 +48,7 @@ describe('Soundcloud', function() {
         httpMock.getBody = playlists;
 
         scReq.users(userId).playlists().get(function(err, results) {
-            expect(httpMock.getOptions.url).to.equal(options.api_url + "users/" + userId + "/playlists");
+            expect(httpMock.getOptions.url).to.equal(soundcloud.config.api_url + "users/" + userId + "/playlists");
             expect(err).to.be.null;
             expect(results).to.equal(playlists);
             done();
@@ -69,9 +69,9 @@ describe('Soundcloud', function() {
             expect(httpMock.getOptions.qs.client_id).to.be.undefined;
             expect(httpMock.getOptions.qs.secret_token).to.equal(userToken);
 
-            expect(httpMock.getOptions.url).to.equal(options.api_url + "playlists/" + playlistId);
+            expect(httpMock.getOptions.url).to.equal(soundcloud.config.api_url + "playlists/" + playlistId);
             expect(httpMock.getOptions.method).to.equal("PUT");
-            expect(httpMock.getOptions.body).to.be.defined;
+            expect(httpMock.getOptions.body).not.to.be.undefined;
             expect(httpMock.getOptions.body.length).to.equal(tracks.length);
             expect(httpMock.getOptions.body[0]).to.equal(tracks[0]);
             expect(httpMock.getOptions.body[1]).to.equal(tracks[1]);

@@ -9,7 +9,7 @@ var Config = {
     staticFolder: defaultConfig.staticFolder
 };
 
-Config.host = Config.protocol + '://' + Config.hostname + (Config.port && !Config.proxied ? (':' + Config.port) : '');
+Config.host = Config.protocol + '://' + Config.hostname + (Config.proxied ? '' : (':' + Config.web_port));
 
 Config.services = {
     soundcloud: {

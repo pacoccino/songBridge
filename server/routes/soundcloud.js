@@ -6,10 +6,8 @@ var passport = require('passport');
 var Helpers = require('./../modules/helpers');
 var Errors = require('./../modules/errors');
 var Config = require('./../modules/config');
-var Middlewares = require('./../modules/middlewares');
 var SoundCloud = require('./../connectors/soundcloud');
-var Users = require('../models/users')
-var Authorization = require('../modules/authorization')
+var Authorization = require('../modules/authorization');
 
 
 var SoundcloudRouter = express.Router({ params: 'inherit' });
@@ -30,9 +28,9 @@ SoundcloudRouter.get('/login',
 );
 
 SoundcloudRouter.get('/callback',
-        passport.authenticate('soundcloud', { failureRedirect: '/login' }),
+        passport.authenticate('soundcloud', { failureRedirect: Authorization.State_URL }),
         function(req, res) {
-            res.redirect('/api/soundcloud/state');
+            res.redirect(Authorization.State_URL);
         }
 );
 
@@ -47,7 +45,13 @@ SoundcloudRouter.get('/state', Authorization.ensureAuthenticated, function(req, 
 });
 SoundcloudRouter.get('/get/:resource/:resourceId?/:subResource?/:subResourceId?', function(req,res) {
 
-    var userToken = req.query.token || null;
+    var userToken = null;
+    if(req.user) {
+        var connection = req.user.getConnection("soundcloud");
+        if(connection) {
+            userToken = connection.tokens.access_token;
+        }
+    }
 
     var scReq = soundcloud.newRequest(userToken);
     try {

@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 
 var connectionSchema = mongoose.Schema(
     {
-        serviceId: {type: String, index: true},
+        _id: String,
         userId: String,
         tokens: {
             access_token: String,
@@ -11,7 +11,9 @@ var connectionSchema = mongoose.Schema(
             timestamp: Date
         }
     },
-    {_id: false}
+    {
+        strict: true
+    }
 );
 
 var userSchema = mongoose.Schema(
@@ -24,23 +26,42 @@ var userSchema = mongoose.Schema(
 );
 
 userSchema.methods = {
-    setConnection: function(service, tokens) {
+    setConnection: function(serviceId, connection) {
+        var connectionToSet = {
+            _id: serviceId,
+            userId: connection.userId,
+            tokens: {
+                access_token: connection.tokens.access_token,
+                refresh_token: connection.tokens.refresh_token,
+                timestamp: connection.tokens.timestamp
+            }
+        };
 
-        this.connections[service.infos.serviceId] = tokens;
+        var existingConnection = this.connections.id(serviceId);
+        if(existingConnection) {
+            existingConnection.remove();
+        }
+        this.connections.push(connectionToSet);
     },
-    getConnection: function(service) {
+    getConnection: function(serviceId) {
 
-        if(!service) return null;
+        if(!serviceId) return null;
 
-        return this.connections[service.infos.serviceId];
+        var existingConnection = this.connections.id(serviceId);
+
+        if(existingConnection) {
+            return existingConnection
+        }
+        else {
+            return null
+        }
     },
-    refreshToken: function(service, access_token) {
+    unsetConnection: function(serviceId) {
 
-        this.connections[service.infos.serviceId].access_token = access_token;
-    },
-    unsetConnection: function(service) {
-
-        delete this.connections[service.infos.serviceId];
+        var existingConnection = this.connections.id(serviceId);
+        if(existingConnection) {
+            existingConnection.remove();
+        }
     }
 };
 

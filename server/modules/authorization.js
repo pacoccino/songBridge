@@ -5,9 +5,14 @@ var Users = require('../models/users');
 var users = new Users();
 
 var a = users.create();
-console.log(a.connections);
 
-exports.use = function(passport) {
+var Authorization = {};
+
+Authorization.Login_URL = '/api/soundcloud/login';
+Authorization.State_URL = '/api/soundcloud/state';
+Authorization.Callback_URL = '/api/soundcloud/callback';
+
+Authorization.use = function(passport) {
     passport.serializeUser(function(user, done) {
         console.log('serialize: ', user);
         done(null, user._id);
@@ -23,7 +28,7 @@ exports.use = function(passport) {
     passport.use(new SoundCloudStrategy({
             clientID: Config.services.soundcloud.client_id,
             clientSecret: Config.services.soundcloud.client_secret,
-            callbackURL: "http://localhost:8080/api/soundcloud/callback",
+            callbackURL: Config.host + Authorization.Callback_URL,
             scope: "non-expiring"
         },
         function(accessToken, refreshToken, profile, done) {
@@ -31,13 +36,9 @@ exports.use = function(passport) {
             process.nextTick(function () {
 
                 var user = users.findOrCreate(profile.id, 'soundcloud');
-                var existingConnection = user.connections.id('soundcloud');
-                if(existingConnection) {
-                    existingConnection.remove();
-                }
-                user.connections.push(
+
+                user.setConnection('soundcloud',
                     {
-                        serviceId: 'soundcloud',
                         userId: profile.id,
                         tokens: {
                             access_token: accessToken,
@@ -53,7 +54,9 @@ exports.use = function(passport) {
     ));
 };
 
-exports.ensureAuthenticated = function(req, res, next) {
+Authorization.ensureAuthenticated = function(req, res, next) {
     if (req.isAuthenticated()) { return next(); }
-    res.redirect('/login')
+    res.redirect(Authorization.Login_URL)
 };
+
+module.exports = Authorization;
