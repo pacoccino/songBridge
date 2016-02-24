@@ -15,7 +15,8 @@ var Errors = require('./../modules/errors');
 class Connector {
 
     constructor() {
-        if(new.target.name === "Connector") // On the edge ^_^
+        if(this instanceof Connector) // On the edge ^_^
+        //if(new.target.name === "Connector") // On the edge ^_^
             throw "Connector shouldnt be instanciated (abstract)";
     }
 

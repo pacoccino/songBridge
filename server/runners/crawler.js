@@ -45,7 +45,7 @@ function resetDatabase(callback) {
         }
     });
     async.waterfall([
-        lobby.save
+        lobby.save,
         user.save
                     ], function(err) {
         if(err) return console.log(err);
