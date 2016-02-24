@@ -1,2 +1,9 @@
-# songBridge
-Platform to synchronize libraries between multiple music streaming services
+# songBridge [![Build Status](https://travis-ci.org/pakokrew/songBridge.svg?branch=master)](https://travis-ci.org/pakokrew/songBridge)
+
+Universal music library tool
+
+## Tools used
+- NodeJs v4+
+- MongoDB
+- Redis
+- ZeroMQ
