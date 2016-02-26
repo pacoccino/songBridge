@@ -8,8 +8,7 @@ var lobbySchema = mongoose.Schema({
         artists: [String]
     },
     {
-        strict: true,
-        _id: false
+        strict: true
     }
 );
 

@@ -1,0 +1,14 @@
+[
+  {
+    "connections": [
+      {
+        "_id": "soundcloud",
+        "userId": "10878168",
+        "tokens": {
+          "access_token": "1-163360-10878168-2542f10b8e0eca",
+          "timestamp": "2016-02-26T16:13:41.280Z"
+        }
+      }
+    ]
+  }
+]

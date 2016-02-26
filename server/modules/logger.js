@@ -2,7 +2,7 @@ var winston = require('winston');
 
 var winstonConfig = {
     transports: [
-        new (winston.transports.Console)({ level: 'info' })
+        new (winston.transports.Console)({ level: 'silly' })
         /*,
         new (winston.transports.File)({
             filename: 'somefile.log',

@@ -7,9 +7,9 @@ var ResourceObject = require('./resourceObject');
 class Connector {
 
     constructor(options, http) {
-        if(this.constructor.name === "Connector") // On the edge ^_^
-        //if(new.target.name === "Connector") // On the edge ^_^
+        /*if(new.target.name === "Connector") // On the edge ^_^
             throw "Connector shouldnt be instanciated (abstract)";
+            */
 
         this.options = options;
         this.http = http;

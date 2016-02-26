@@ -9,12 +9,12 @@
 
   "services": {
     "soundcloud": {
-      "client_id": "",
-      "client_secret": ""
+      "client_id": "bf005413b19842fbf55e6aac73687ac8",
+      "client_secret": "5262675c6e05173bd512c542c3ba05bb"
     }
   },
 
   "connections": {
-    "mongoUrl": ""
+    "mongoUrl": "mongodb://caca:caca@ds041494.mlab.com:41494/songbridge"
   }
 }
