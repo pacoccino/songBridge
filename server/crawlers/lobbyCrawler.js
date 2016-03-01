@@ -13,6 +13,11 @@ class LobbyCrawler {
         this.lobbies = lobbies;
     }
 
+    /**
+     * @private
+     * @param lobby
+     * @param callback
+     */
     updateLobby(lobby, callback) {
         var self = this;
         var tracks = [];
@@ -34,28 +39,56 @@ class LobbyCrawler {
 
             var trackIds = _.map(tracks, 'id');
 
-            self.updatePlaylistTracks(lobby, trackIds, function(updateError) {
-                if(updateError) return callback(updateError);
+            self.getLobbyUser(lobby, function(userError, user) {
+                if(userError) return callback(userError);
 
-                callback(null);
+                self.updatePlaylistTracks(lobby.sc_id_playlist, user, trackIds, function(updateCb) {
+                    if(updateCb) return callback(updateCb);
+                    callback(null);
+                });
             });
         });
     }
 
-    updatePlaylistTracks(lobby, tracks, callback) {
+    /**
+     * @private
+     * @param lobby
+     * @param tracks
+     * @param callback
+     */
+    getLobbyUser(lobby, callback) {
         var self = this;
 
         self.users.findById(lobby.sc_id_user, function(err, user) {
             if(err) return callback(err);
 
-            self.soundcloud.updatePlaylist(lobby.sc_id_playlist, user, tracks, function(updateErr) {
-                if(updateErr) return callback(updateErr);
-
-                callback(null);
-            });
+            callback(user);
         });
     }
 
+    /**
+     * @private
+     * @param callback
+     * @param playlistId
+     * @param user
+     * @param trackIds
+     */
+    updatePlaylistTracks(playlistId, user, trackIds, callback) {
+        var self = this;
+
+        var scConnection = user.getConnection("soundcloud");
+        var userToken = scConnection.tokens.access_token;
+
+        var request = self.soundcloud.newRequest(userToken);
+
+        request.users(scConnection.userId).playlists(playlistId).put(trackIds, callback);
+    }
+
+    /**
+     * @private
+     * @param artistId
+     * @param callback
+     */
     getLastArtistSongsNoCache(artistId, callback) {
         var self = this;
         var options = {
@@ -80,6 +113,11 @@ class LobbyCrawler {
         });
     }
 
+    /**
+     * @private
+     * @param artistId
+     * @param callback
+     */
     getLastArtistSongs(artistId, callback) {
         var self = this;
         // TODO redis, async
@@ -107,10 +145,20 @@ class LobbyCrawler {
         });
     }
 
+    /**
+     * Sort tracks by timestamp
+     * @private
+     * @param tracks
+     * @returns {Array}
+     */
     sortTracks(tracks) {
         return _.sortBy(tracks, 'timestamp');
     }
 
+    /**
+     * Crawl every lobbies, fetch associated artists update playlist songs
+     * @param callback
+     */
     crawlLobbies(callback) {
         var self = this;
         var limitLobbies = 10;
