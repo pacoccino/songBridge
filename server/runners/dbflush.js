@@ -4,39 +4,41 @@ var Config = require('../modules/config');
 var Connections = require('../modules/connections');
 var Logger = require('../modules/logger');
 
-var User = require('../models/user');
-var Lobby = require('../scmodels/lobby');
-
 var usersInitial = require('../../test/mocks/initialData/users');
 var lobbiesInitial = require('../../test/mocks/initialData/lobbies');
 
 var connections = new Connections();
 
-var mongo = connections.mongo;
-
-async.waterfall(
-    [
-        flush,
-        populate
-    ],
-    function(err) {
-        if(err) return Logger.error(err.toString(), err);
-
-        Logger.silly("finished resetting database");
+connections.init(function(error) {
+    if(error) {
+        return Logger.error(error);
     }
-);
+
+    async.waterfall(
+        [
+            flush,
+            populate,
+            close
+        ],
+        function(err) {
+            if(err) return Logger.error(err.toString(), err);
+
+            Logger.silly("finished resetting database");
+        }
+    );
+});
+
 
 
 function flush(callback) {
     Logger.silly("Flushing Database");
     var collectionsToFlush = ["caca", "User", "Lobby"];
-    mongo.collection("caca").remove({});
-    mongo.collection("User").remove({});
-    mongo.collection("Lobby").remove({});
+    connections.mongo.collection("SC_Lobbies").drop();
+    connections.mongo.collection("Users_Generic").drop();
 
 
     function flushCollection(item, cb) {
-        mongo.collection(item).remove({}, cb);
+        connections.mongo.collection(item).remove({}, cb);
     }
 
     async.each(collectionsToFlush, flushCollection, function(err) {
@@ -49,6 +51,9 @@ function flush(callback) {
 
 function populate(callback) {
     Logger.silly("Populating Database");
+
+    var User = connections.mongo.model("User");
+    var Lobby = connections.models.Lobby;
 
     var itemstosave = [];
     for (var i = 0; i < usersInitial.length; i++) {
@@ -63,11 +68,10 @@ function populate(callback) {
     function saveItem(item, cb) {
         Logger.silly("Saving item", item.toObject());
         item.save(function(err, added) {
-            Logger.silly(err);
             if(err) {
                 return cb(err);
             }
-            Logger.silly("added: " + added);
+            Logger.silly("added: " + added._id.toString());
             cb(null);
         });
     }
@@ -77,5 +81,11 @@ function populate(callback) {
             Logger.silly("finished populating db");
         }
         callback(err);
+    });
+}
+
+function close() {
+    connections.close(function() {
+        Logger.info("Connections closed");
     });
 }

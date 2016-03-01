@@ -16,16 +16,17 @@ var connectionSchema = mongoose.Schema(
     }
 );
 
-var userSchema = mongoose.Schema(
+var UserSchema = mongoose.Schema(
     {
         connections: [connectionSchema]
     },
     {
-        strict: true
+        strict: true,
+        collection: "Users_Generic"
     }
 );
 
-userSchema.methods = {
+UserSchema.methods = {
     setConnection: function(serviceId, connection) {
         var connectionToSet = {
             _id: serviceId,
@@ -65,7 +66,4 @@ userSchema.methods = {
     }
 };
 
-var User = mongoose.model('User', userSchema);
-
-
-module.exports = User;
+module.exports = UserSchema;

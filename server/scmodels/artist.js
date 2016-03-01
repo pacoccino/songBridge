@@ -1,17 +1,18 @@
 var mongoose = require('mongoose');
 var _ = require('lodash');
 
-var artistSchema = mongoose.Schema({
+var ArtistSchema = mongoose.Schema({
         sc_id_artist: {type: String, index: true},
         lastFetchedSong: String
     },
     {
         strict: true,
-        _id: false
+        _id: false,
+        collection: "Artists_Soundcloud"
     }
 );
 
-artistSchema.methods = {
+ArtistSchema.methods = {
     getLobbies: function(callback) {
         // TODO get all lobbies containing this artist
         callback([]);
@@ -26,6 +27,4 @@ artistSchema.methods = {
     }
 };
 
-var Lobby = mongoose.model('Artist', artistSchema);
-
-module.exports = Lobby;
+module.exports = ArtistSchema;

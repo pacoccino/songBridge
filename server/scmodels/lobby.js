@@ -1,18 +1,19 @@
 var mongoose = require('mongoose');
 var _ = require('lodash');
 
-var lobbySchema = mongoose.Schema({
+var LobbySchema = mongoose.Schema({
         sc_id_playlist: {type: String, index: true},
         sc_id_user: String,
         name: String,
         artists: [String]
     },
     {
-        strict: true
+        strict: true,
+        collection: "SC_Lobbies"
     }
 );
 
-lobbySchema.statics = {
+LobbySchema.statics = {
     list: function(userId, callback, options) {
         options = options || {};
         options = _.assign(options, {
@@ -31,7 +32,7 @@ lobbySchema.statics = {
     }
 };
 
-lobbySchema.methods = {
+LobbySchema.methods = {
     addArtist: function(artistId, callback) {
         if(typeof artistId !== string) {
             return callback("Wrong artist id");
@@ -59,6 +60,4 @@ lobbySchema.methods = {
     }
 };
 
-var Lobby = mongoose.model('Lobby', lobbySchema);
-
-module.exports = Lobby;
+module.exports = LobbySchema;
