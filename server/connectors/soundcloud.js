@@ -96,11 +96,14 @@ class SoundCloud extends Connector {
             url: url,
             method: request.requestType,
             qs: params,
-            body: data
+            body: JSON.stringify(data)
         };
 
         this.http(options, function(error, response, body) {
             // TODO catch error (body empty)
+            if(!error) {
+                body = JSON.parse(body);
+            }
             callback(error, body);
         });
     }

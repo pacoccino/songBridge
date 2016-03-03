@@ -3,6 +3,8 @@
 var _ = require('lodash');
 var async = require('async');
 
+var Logger = require('../modules/logger');
+
 // TODO mieux gerer les erreurs, quand s'arreter ?
 
 class LobbyCrawler {
@@ -24,7 +26,10 @@ class LobbyCrawler {
 
         async.each(lobby.artists, function(artistId, artistCallback) {
 
+
             self.getLastArtistSongs(artistId, function(err, artistTracks) {
+
+                Logger.silly("artist " +artistId+": " + artistTracks.length + " songs");
 
                 if(err) return callback(err);
 
@@ -41,6 +46,8 @@ class LobbyCrawler {
 
             self.getLobbyUser(lobby, function(userError, user) {
                 if(userError) return callback(userError);
+
+                Logger.silly("user: " + user.toString());
 
                 self.updatePlaylistTracks(lobby.sc_id_playlist, user, trackIds, function(updateCb) {
                     if(updateCb) return callback(updateCb);
@@ -59,7 +66,7 @@ class LobbyCrawler {
     getLobbyUser(lobby, callback) {
         var self = this;
 
-        self.users.findById(lobby.sc_id_user, function(err, user) {
+        self.users.findByServiceId("soundcloud", lobby.toObject().sc_id_user, function(err, user) {
             if(err) return callback(err);
 
             callback(null, user);
@@ -75,6 +82,7 @@ class LobbyCrawler {
      */
     updatePlaylistTracks(playlistId, user, trackIds, callback) {
         var self = this;
+        Logger.silly("preparing to update...");
 
         var scConnection = user.getConnection("soundcloud");
         var userToken = scConnection.tokens.access_token;
@@ -163,11 +171,15 @@ class LobbyCrawler {
      * @param callback
      */
     crawlLobbies(callback) {
+        Logger.silly("Crawling lobbies");
+
         var self = this;
         var limitLobbies = 10;
 
         this.lobbies.find({}, function onLobbies(err, lobbies) {
             if(err) return callback(err);
+
+            Logger.silly(lobbies.length + " lobbies to crawl");
 
             async.eachLimit(lobbies, limitLobbies, self.updateLobby.bind(self), function(lobbyErr) {
                 if(lobbyErr) return callback(lobbyErr);

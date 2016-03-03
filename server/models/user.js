@@ -66,4 +66,13 @@ UserSchema.methods = {
     }
 };
 
+UserSchema.statics = {
+    findByServiceId: function(serviceId, userId, callback) {
+        this.findOne({
+            "connections._id": serviceId,
+            "connections.userId": userId
+        }, callback);
+    }
+};
+
 module.exports = UserSchema;

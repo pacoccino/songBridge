@@ -10,7 +10,11 @@ var lobbyCrawler;
 var connections = new Connections();
 var soundcloud = new SoundCloud(Config.services.soundcloud, request);
 
+Logger.info("Crawler started");
+
 connections.init(function(error) {
+    Logger.silly("Connections ok");
+
     if(error) {
         return Logger.error(error);
     }
@@ -20,13 +24,20 @@ connections.init(function(error) {
 });
 
 
-var crawlInterval = 200;
+var crawlInterval = 10000;
 var lastCrawl = null;
 
 function cronLobbyCrawler() {
     var now = Date.now();
     if(!lastCrawl || (lastCrawl + crawlInterval < now)) {
-        lobbyCrawler.crawlLobbies(function() {
+        lastCrawl = now;
+        Logger.silly("Launching new crawl");
+        lobbyCrawler.crawlLobbies(function(error) {
+            if(error) {
+                Logger.error(error);
+            }
+            Logger.silly("Finished crawl");
+
             cronLobbyCrawler();
         });
     }

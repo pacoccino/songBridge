@@ -1,10 +1,10 @@
 var Config = require('./../modules/config');
 var SoundCloudStrategy = require('passport-soundcloud').Strategy;
+var UserSchema = require('../models/user');
 var Users = require('../models/users');
 
-var users = new Users();
-
-var a = users.create();
+var mongoose = require('mongoose');
+var users = new Users(mongoose.model('User', UserSchema));
 
 var Authorization = {};
 
