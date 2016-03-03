@@ -62,7 +62,7 @@ class LobbyCrawler {
         self.users.findById(lobby.sc_id_user, function(err, user) {
             if(err) return callback(err);
 
-            callback(user);
+            callback(null, user);
         });
     }
 
@@ -96,7 +96,10 @@ class LobbyCrawler {
             offset: 0
         };
 
-        self.soundcloud.getLastArtistSongs(artistId, options, function(err, lastSCTracks) {
+        var request = self.soundcloud.newRequest();
+        request.users(artistId).tracks().get(options, onTracks);
+
+        function onTracks(err, lastSCTracks) {
             if(err) return callback(err);
 
             var lastTracks = _.map(lastSCTracks, function(scTrack) {
@@ -104,13 +107,13 @@ class LobbyCrawler {
                     id: scTrack.id
                 };
 
-                track.timestamp = self.soundcloud.getTimestamp(scTrack);
+                track.timestamp = self.soundcloud.constructor.getTimestamp(scTrack);
 
                 return track;
             });
 
             callback(null, lastTracks);
-        });
+        }
     }
 
     /**

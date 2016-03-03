@@ -64,7 +64,12 @@ class ResourceObject {
         return this.appendResource("favorites", id);
     }
 
-    get(callback) {
+    get(options, callback) {
+        if(typeof callback !== "function") {
+            callback = options;
+            options = {};
+        }
+
         if(!this.isResource() && !this.isSubResource()) {
             throw "Empty get request";
         }

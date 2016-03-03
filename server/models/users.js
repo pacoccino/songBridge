@@ -1,12 +1,12 @@
-var User = require('./user');
 var _ = require('lodash');
 
-function Users() {
+function Users(UserModel) {
+    this.UserModel = UserModel;
     this.users = [];
 }
 
 Users.prototype.create = function() {
-    var user = new User();
+    var user = new this.UserModel();
 
     this.users.push(user);
 

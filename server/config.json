@@ -15,6 +15,6 @@
   },
 
   "connections": {
-    "mongoUrl": "mongodb://caca:caca@ds041494.mlab.com:41494/songbridge"
+    "mongoUrl": ""
   }
 }

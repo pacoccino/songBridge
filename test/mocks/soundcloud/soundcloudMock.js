@@ -1,25 +1,33 @@
+var Soundcloud = require('../../../server/connectors/soundcloud');
+
 var soundcloudMock = {
-    updatePlaylist: function(playlistId, user, trackList, callback) {
-        this.updatePlaylistData = {
-            playlistId: playlistId,
-            user: user,
-            trackList: trackList
+    newRequest: function() {
+        var requestObject = {
+            users: function() {
+                return this;
+            },
+            playlists: function() {
+                return this;
+            },
+            tracks: function() {
+                return this;
+            },
+            get: function(a, c) {
+                c(soundcloudMock.getError, soundcloudMock.getData);
+            },
+            put: function(d, c) {
+                c();
+            }
         };
-        callback(this.updatePlaylistError);
+
+        return requestObject;
     },
-    getLastArtistSongs: function(artistId, options, callback) {
-        callback(this.getLastArtistSongsError, this.getLastArtistSongsData);
-    },
-    getTimestamp: function(track) {
-        return 0;
-    }
+    getTimestamp: Soundcloud.getTimestamp
 };
 
 soundcloudMock.reset = function() {
-    soundcloudMock.getLastArtistSongsData = null;
-    soundcloudMock.getLastArtistSongsError = null;
-    soundcloudMock.updatePlaylistData = null;
-    soundcloudMock.updatePlaylistError = null;
+    soundcloudMock.getData = null;
+    soundcloudMock.getError = null;
 };
 
 module.exports = soundcloudMock;

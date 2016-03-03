@@ -1,4 +1,5 @@
 var expect = require('chai').expect;
+var mongoose = require('mongoose');
 
 var User = require('../../../server/models/user');
 
@@ -7,7 +8,8 @@ var user;
 describe('User', function() {
 
     beforeEach(function () {
-        user = new User();
+        var UserModel = mongoose.model('User', User);
+        user = new UserModel();
     });
 
     it('creates user', function () {

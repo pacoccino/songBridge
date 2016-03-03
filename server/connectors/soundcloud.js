@@ -28,6 +28,10 @@ class SoundCloud extends Connector {
     }
 
     static isValidRequest(request) {
+        if(SoundCloud.isPrivateRequest(request) && !request.userToken) {
+            return false;
+        }
+
         if(request.resource === "users" || request.resource === "me") {
             if(request.resource !== "me" && !request.resourceId) {
                 return false;
@@ -61,6 +65,11 @@ class SoundCloud extends Connector {
             return true;
         }
         return false;
+    }
+
+    // TODO
+    static getTimestamp(track) {
+        return 12;
     }
 
     //@override
@@ -120,6 +129,7 @@ class SoundCloud extends Connector {
 
         })
     }
+
 }
 
 module.exports = SoundCloud;
