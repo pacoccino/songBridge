@@ -1,31 +1,34 @@
-var mongoose = require('mongoose');
+var request = require('request');
 
+var data = {
+    playlist: {
+        tracks: [
+            {id: 235911577},
+            {id: 2}
+        ]
+    }
+};
 
-// Création du schéma pour les commentaires
-var commentaireArticleSchema = new mongoose.Schema({
-    pseudo : { type : String, match: /^[a-zA-Z0-9-_]+$/ },
-    contenu : String,
-    date : { type : Date, default : Date.now }
+var options = {
+    url: "https://api.soundcloud.com/users/10878168/playlists/202217371",
+    method: "PUT",
+    body: JSON.stringify(data),
+    qs: {
+        client_id: "bf005413b19842fbf55e6aac73687ac8"
+    },
+    headers: {
+        "Authorization": "OAuth 1-163360-10878168-a5fb51a3b1304c",
+        "Content-Type": "application/json"
+    },
+    json: true
+};
+
+request(options, function(error, response, body) {
+    console.error(error);
+    console.log(response.statusCode)
+    console.log(body)
 });
 
-// Création du Model pour les commentaires
-var CommentaireArticleModel = mongoose.model('commentaires', commentaireArticleSchema);
-
-// On crée une instance du Model
-var monCommentaire = new CommentaireArticleModel({ pseudo : 'Atinux' });
-monCommentaire.contenu = 'Salut, super article sur Mongoose !';
-
-
-// On se connecte à la base de données
-// N'oubliez pas de lancer ~/mongodb/bin/mongod dans un terminal !
-mongoose.connect('mongodb://caca:caca@ds041494.mlab.com:41494/songbridge', function(err) {
-    if (err) { throw err; }
-});
-
-// On le sauvegarde dans MongoDB !
-monCommentaire.save(function (err) {
-    if (err) { throw err; }
-    console.log('Commentaire ajouté avec succès !');
-    // On se déconnecte de MongoDB maintenant
-    mongoose.connection.close();
-});
+setTimeout(function() {
+    console.log("over");
+}, 3000)

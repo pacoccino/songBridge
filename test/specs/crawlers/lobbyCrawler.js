@@ -29,8 +29,8 @@ describe('LobbyCrawler', function() {
             trackMock
         ];
 
-        soundcloudMock.getData = songs;
-        soundcloudMock.getError = null;
+        soundcloudMock.mData.getData = songs;
+        soundcloudMock.mData.getError = null;
 
         lobbyCrawler.getLastArtistSongsNoCache("artistId", function (err, artistSongs) {
             expect(err).to.be.null;
@@ -41,11 +41,11 @@ describe('LobbyCrawler', function() {
         });
     });
     it('getLastArtistSongsNoCache with error', function (done) {
-        soundcloudMock.getData = null;
-        soundcloudMock.getError = "scerr";
+        soundcloudMock.mData.getData = null;
+        soundcloudMock.mData.getError = "scerr";
 
         lobbyCrawler.getLastArtistSongsNoCache("artistId", function (err, artistSongs) {
-            expect(err).to.equal(soundcloudMock.getError);
+            expect(err).to.equal(soundcloudMock.mData.getError);
             expect(artistSongs).to.be.undefined;
             done();
         });
@@ -60,8 +60,8 @@ describe('LobbyCrawler', function() {
         cacheMock.getData = null;
         cacheMock.getError = null;
 
-        soundcloudMock.getData = songs;
-        soundcloudMock.getError = null;
+        soundcloudMock.mData.getData = songs;
+        soundcloudMock.mData.getError = null;
 
         lobbyCrawler.getLastArtistSongs("artistId", function (err, artistSongs) {
             expect(err).to.be.null;
@@ -80,8 +80,8 @@ describe('LobbyCrawler', function() {
         cacheMock.getData = songs;
         cacheMock.getError = null;
 
-        soundcloudMock.getData = null;
-        soundcloudMock.getError = null;
+        soundcloudMock.mData.getData = null;
+        soundcloudMock.mData.getError = null;
 
         lobbyCrawler.getLastArtistSongs("artistId", function (err, artistSongs) {
             expect(err).to.be.null;
@@ -147,7 +147,7 @@ describe('LobbyCrawler', function() {
         });
     });
 
-    xit('updatePlaylistTracks', function (done) {
+    it('updatePlaylistTracks', function (done) {
         var playlistId = 123;
         var lobby = {
             id_sc_playlist: 1235,
@@ -174,8 +174,18 @@ describe('LobbyCrawler', function() {
 
         var trackIds = [0,1,2];
 
+
+        soundcloudMock.mData.getData = null;
+        soundcloudMock.mData.getError = null;
+
         lobbyCrawler.updatePlaylistTracks(playlistId, user, trackIds, function (err) {
-            expect(err).to.be.null;
+            expect(err).not.to.exist;
+            expect(soundcloudMock.mData.putData).to.exist;
+            expect(soundcloudMock.mData.putData.length).to.equal(trackIds.length);
+            console.log(soundcloudMock.mData.putData);
+            expect(soundcloudMock.mData.putData[0].id).to.equal(trackIds[0]);
+            expect(soundcloudMock.mData.putData[1].id).to.equal(trackIds[1]);
+
             done();
         });
     });

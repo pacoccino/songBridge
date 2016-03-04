@@ -3,6 +3,7 @@
 var _ = require('lodash');
 
 var Connector = require('./connector');
+var Logger = require('../modules/logger');
 
 // TODO
 // compact representation
@@ -72,6 +73,21 @@ class SoundCloud extends Connector {
         return 12;
     }
 
+    getRequestData(request) {
+        var data = null;
+        if(!request.requestData) {
+            return data;
+        }
+        if(request.subResource === "playlists") {
+            data = {
+                playlist: {
+                    tracks: request.requestData
+                }
+            };
+        }
+        return data;
+    }
+
     //@override
     endRequest(request, callback) {
         if(!SoundCloud.isValidRequest(request)) {
@@ -80,29 +96,36 @@ class SoundCloud extends Connector {
         var url = this.buildApiUrl(request);
 
         var params = {};
+        params.client_id = this.options.client_id;
+
+        var headers = {
+            "Content-Type": "application/json"
+        };
         if(SoundCloud.isPrivateRequest(request)) {
-            params.secret_token = request.userToken;
-        }
-        else {
-            params.client_id = this.options.client_id;
+            headers.Authorization = "OAuth " + request.userToken;
         }
 
-        var data = null;
-        if(request.requestData) {
-            data = request.requestData;
-        }
+        var data = this.getRequestData(request);
 
         var options = {
             url: url,
             method: request.requestType,
             qs: params,
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
+            headers: headers,
+            json: true
         };
 
+        Logger.info(options);
         this.http(options, function(error, response, body) {
             // TODO catch error (body empty)
             if(!error) {
-                body = JSON.parse(body);
+                try{
+                    body = JSON.parse(body);
+                }
+                catch(e) {
+                    Logger.silly('Http response not serialisable')
+                }
             }
             callback(error, body);
         });

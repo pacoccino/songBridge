@@ -66,7 +66,7 @@ class LobbyCrawler {
     getLobbyUser(lobby, callback) {
         var self = this;
 
-        self.users.findByServiceId("soundcloud", lobby.toObject().sc_id_user, function(err, user) {
+        self.users.findByServiceId("soundcloud", lobby.sc_id_user, function(err, user) {
             if(err) return callback(err);
 
             callback(null, user);
@@ -89,7 +89,9 @@ class LobbyCrawler {
 
         var request = self.soundcloud.newRequest(userToken);
 
-        request.users(scConnection.userId).playlists(playlistId).put(trackIds, callback);
+        var tracks = _.map( trackIds, (trackId) => {return {id: trackId};} );
+
+        request.users(scConnection.userId).playlists(playlistId).put(tracks, callback);
     }
 
     /**
@@ -115,6 +117,8 @@ class LobbyCrawler {
                     id: scTrack.id
                 };
 
+                console.log(scTrack)
+                console.log(track)
                 track.timestamp = self.soundcloud.constructor.getTimestamp(scTrack);
 
                 return track;

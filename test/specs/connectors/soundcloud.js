@@ -1,6 +1,6 @@
 var expect = require('chai').expect;
 
-var Soundcloud = require('../../../server/connectors/soundcloud')
+var Soundcloud = require('../../../server/connectors/soundcloud');
 
 var httpMock = require('../../mocks/httpMock');
 
@@ -71,10 +71,12 @@ describe('Soundcloud', function() {
 
             expect(httpMock.getOptions.url).to.equal(soundcloud.config.api_url + "playlists/" + playlistId);
             expect(httpMock.getOptions.method).to.equal("PUT");
-            expect(httpMock.getOptions.body).not.to.be.undefined;
-            expect(httpMock.getOptions.body.length).to.equal(tracks.length);
-            expect(httpMock.getOptions.body[0]).to.equal(tracks[0]);
-            expect(httpMock.getOptions.body[1]).to.equal(tracks[1]);
+            expect(httpMock.getOptions.form).not.to.be.null;
+            expect(httpMock.getOptions.form.playlist).not.to.be.undefined;
+            expect(httpMock.getOptions.form.playlist.tracks).not.to.be.undefined;
+            expect(httpMock.getOptions.form.playlist.tracks.length).to.equal(tracks.length);
+            expect(httpMock.getOptions.form.playlist.tracks[0]).to.equal(tracks[0]);
+            expect(httpMock.getOptions.form.playlist.tracks[1]).to.equal(tracks[1]);
             done();
         });
     });
