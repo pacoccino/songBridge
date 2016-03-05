@@ -9,12 +9,17 @@
 
   "services": {
     "soundcloud": {
-      "client_id": "bf005413b19842fbf55e6aac73687ac8",
-      "client_secret": "5262675c6e05173bd512c542c3ba05bb"
+      "client_id": "",
+      "client_secret": ""
     }
   },
 
   "connections": {
     "mongoUrl": ""
+  },
+
+  "etcd": {
+    "host": "192.168.1.23",
+    "port": 4001
   }
 }

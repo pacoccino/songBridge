@@ -22,4 +22,12 @@ Config.connections = {
     mongoUrl: process.env.MONGO_URL || defaultConfig.connections.mongoUrl
 };
 
+Config.ssl = {
+    ca: null,
+    cert: null,
+    key: null
+};
+
+Config.etcd = defaultConfig.etcd;
+
 module.exports = Config;
