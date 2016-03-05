@@ -12,7 +12,7 @@ class RamCache {
         if(cached) {
             var now = Date.now();
             if(cached.expiration < now) {
-                return callback(null, this.memory[name]);
+                return callback(null, cached.data);
             }
             else {
                 delete this.memory[name];

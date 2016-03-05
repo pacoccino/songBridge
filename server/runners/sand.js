@@ -10,16 +10,15 @@ var data = {
 };
 
 var options = {
-    url: "https://api.soundcloud.com/users/10878168/playlists/202217371",
-    method: "PUT",
-    body: JSON.stringify(data),
+    url: "https://api.soundcloud.com/users/10878169/tracks",
+    method: "GET",
     qs: {
         client_id: "bf005413b19842fbf55e6aac73687ac8"
     },
     headers: {
-        "Authorization": "OAuth 1-163360-10878168-a5fb51a3b1304c",
         "Content-Type": "application/json"
     },
+    body: undefined,
     json: true
 };
 

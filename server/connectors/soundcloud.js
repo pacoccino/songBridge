@@ -111,23 +111,34 @@ class SoundCloud extends Connector {
             url: url,
             method: request.requestType,
             qs: params,
-            body: JSON.stringify(data),
-            headers: headers,
-            json: true
+            headers: headers
         };
 
-        Logger.info(options);
+        if(data) {
+            options.json = data;
+            // or
+            // options.data = JSON.stringify(data);
+        }
+
         this.http(options, function(error, response, body) {
             // TODO catch error (body empty)
-            if(!error) {
+            if(error || response.statusCode !== 200) {
+                var reqError = {
+                    request: options,
+                    code: response.statusCode,
+                    message: response.statusMessage,
+                    body: response.body
+                };
+                callback(reqError);
+            } else {
                 try{
                     body = JSON.parse(body);
                 }
                 catch(e) {
                     Logger.silly('Http response not serialisable')
                 }
+                callback(null, body);
             }
-            callback(error, body);
         });
     }
 

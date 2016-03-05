@@ -29,9 +29,9 @@ class LobbyCrawler {
 
             self.getLastArtistSongs(artistId, function(err, artistTracks) {
 
-                Logger.silly("artist " +artistId+": " + artistTracks.length + " songs");
+                if(err) return artistCallback(err);
 
-                if(err) return callback(err);
+                Logger.silly("artist " +artistId+": " + artistTracks.length + " songs");
 
                 tracks = tracks.concat(artistTracks);
 
