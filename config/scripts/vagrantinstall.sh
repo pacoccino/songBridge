@@ -10,4 +10,8 @@ sudo apt-get install -y nodejs
 
 npm install -g pm2
 
-./dockinstall.sh
+mkdir -p /vagrant/data/mongo
+
+docker run --name sb-mongo -d -p 27017:27017 mongo:latest
+
+docker run --name sb-redis -d -p 6379:6379 redis:latest

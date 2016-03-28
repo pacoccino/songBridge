@@ -7,7 +7,7 @@ docker run --name sb-mongo -d \
         -v ../data/mongo:/data/db \
         mongo:latest
 
-docker kill sb-redis
+docker kill sb-redisdocker
 docker rm sb-redis
 docker run --name sb-redis -d \
         -p 172.17.0.1:15021:6379 \
