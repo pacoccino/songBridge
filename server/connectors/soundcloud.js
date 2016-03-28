@@ -142,6 +142,24 @@ class SoundCloud extends Connector {
         });
     }
 
+    newPlaylist(userToken, name, tracks, callback) {
+        tracks = tracks || [];
+
+        var request = this.newRequest(userToken);
+        request.playlists();
+        var reqData = {
+            playlist: {
+                title: name,
+                sharing: 'public',
+                tracks: tracks
+            }
+        };
+
+        request.post(reqData, function(err, playlist) {
+            callback(err, playlist);
+        });
+    }
+
     addToPlaylist(playlistId, user, tracks, callback) {
         // TODO unshift
 

@@ -5,24 +5,18 @@ var Connections = require('../modules/connections');
 var Logger = require('../modules/logger');
 var LobbyCrawler = require('../crawlers/lobbyCrawler');
 var SoundCloud = require('../connectors/soundcloud');
+var Application = require('../modules/application');
 
 var lobbyCrawler;
-var connections = new Connections();
 var soundcloud = new SoundCloud(Config.services.soundcloud, request);
 
 Logger.info("Crawler started");
 
-connections.init(function(error) {
-    Logger.silly("Connections ok");
-
-    if(error) {
-        return Logger.error(error);
-    }
-
-    lobbyCrawler = new LobbyCrawler(soundcloud, connections.cache, connections.mongo.model("User"), connections.mongo.model("Lobby"));
+Application.init();
+Application.ready.then(function() {
+    lobbyCrawler = new LobbyCrawler(soundcloud, Application.connections.cache, Application.connections.mongo.model("User"), Application.connections.mongo.model("Lobby"));
     cronLobbyCrawler();
 });
-
 
 var crawlInterval = 10000;
 var lastCrawl = null;

@@ -19,7 +19,8 @@ Config.services = {
 };
 
 Config.connections = {
-    mongoUrl: process.env.MONGO_URL || defaultConfig.connections.mongoUrl
+    mongoUrl: process.env.MONGO_URL || defaultConfig.connections.mongoUrl,
+    redis: defaultConfig.connections.redis
 };
 
 Config.ssl = {
@@ -29,5 +30,7 @@ Config.ssl = {
 };
 
 Config.etcd = defaultConfig.etcd;
+
+Config.apiAddress = "http://localhost:3000";
 
 module.exports = Config;
