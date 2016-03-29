@@ -1,18 +1,17 @@
 var express = require('express');
-var request = require('request');
-var _ = require('lodash');
-var passport = require('passport');
 
 var Helpers = require('./../modules/helpers');
 var Errors = require('./../modules/errors');
 var Config = require('./../modules/config');
-var SoundCloud = require('./../connectors/soundcloud');
 var Authorization = require('../modules/authorization');
 
-var LobbyRouter = require('./lobby');
-var soundcloud = new SoundCloud(Config.services.soundcloud, request);
+var Connectors = require('../connectors/connectors');
 
-function SoundcloudRouterFn(connections) {
+var LobbyRouter = require('./lobby');
+
+var soundcloud = Connectors.getConnector('soundcloud');
+
+function SoundcloudRouterFn(connections, passport) {
 
     var SoundcloudRouter = express.Router({ params: 'inherit' });
 

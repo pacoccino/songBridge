@@ -1,27 +1,19 @@
 "use strict";
 
-var _ = require('lodash');
+var request = require('request');
 
-var Spotify = require('./spotify');
+var Config = require('../modules/config');
+
+//var Spotify = require('./spotify');
 var Deezer = require('./deezer');
 var SoundCloud = require('./soundcloud');
-
-var connectorClasses = [
-    Spotify,
-    //SoundCloud,
-    Deezer
-];
 
 var Connectors = {};
 
 Connectors.list = {};
 
-for (var i = 0; i < connectorClasses.length; i++) {
-    var connectorClass = connectorClasses[i];
-    var connector = new connectorClass();
-
-    Connectors.list[connector.infos.serviceId] = connector;
-}
+Connectors.list['soundcloud'] = new SoundCloud(Config.services.soundcloud, request);
+Connectors.list['deezer'] = new Deezer(Config.services.deezer);
 
 Connectors.getConnector = function(serviceId) {
 

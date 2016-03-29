@@ -4,84 +4,56 @@ var request = require('request'); // "Request"
 var Helpers = require('./../modules/helpers');
 var Errors = require('./../modules/errors');
 var Middlewares = require('./../modules/middlewares');
+var Authorization = require('../modules/authorization');
 
-var AuthRouter = express.Router({ params: 'inherit' });
+function AuthRouterFn(passport) {
 
-AuthRouter.get('/', function(req,res) {
-    res.send('auth ok')}
-);
+    var AuthRouter = express.Router({ params: 'inherit' });
 
-AuthRouter.use(Middlewares.auth());
-AuthRouter.use(Middlewares.connectors());
-AuthRouter.use(Middlewares.needConnector());
+    AuthRouter.get('/', function(req,res) {
+        res.send('auth ok')}
+    );
 
-AuthRouter.get('/login', function(req, res) {
+    AuthRouter.use(Middlewares.connectors());
+    //AuthRouter.use(Middlewares.needConnector());
 
-    // Store state for coming back
-    // TODO unkown serviceId params ?
-    var stateKey = req.params.serviceId + '_auth_state';
-    var state = Helpers.generateRandomString(16);
-    res.cookie(stateKey, state);
+    AuthRouter.get('/login',
+        function(req, res, next) {
+            var passportId = req.serviceConnector.config.passportId;
+            passport.authenticate(passportId)(req,res,next);
+        }
+    );
 
-    req.serviceConnector.askLogin(req, res, state);
-});
+    AuthRouter.get('/callback',
+        function(req, res, next) {
+            var passportId = req.serviceConnector.config.passportId;
+            passport.authenticate(passportId, { failureRedirect: '/state' })(req,res,next);
+        },
+        function(req, res) {
+            res.redirect(Authorization.State_URL);
+        }
+    );
 
-AuthRouter.get('/callback', function(req, res) {
 
-    var stateKey = req.params.serviceId + '_auth_state';
-    var storedState = req.cookies ? req.cookies[stateKey] : null;
+    AuthRouter.get('/logout', function(req, res) {
 
-    var state = req.query.state || null;
-
-    if (state === null || state !== storedState) {
-        Errors.sendError(res, 'AUTH_STATE_MISMATCH');
-    } else {
-
-        res.clearCookie(stateKey);
-
-        req.serviceConnector.authCallback(req, res);
-    }
-});
-
-AuthRouter.get('/refresh', function(req, res) {
-
-    req.serviceConnector.refreshToken(req, res);
-});
-
-AuthRouter.get('/logout', function(req, res) {
-
-    req.serviceConnector.logout(req.user, function(err) {
-        if(err) {
-            Logger.error("Logout error", err);
+        if(req.serviceConnector) {
+            req.user.unsetConnection(req.serviceConnector.config.id);
+            req.user.save();
         }
         else {
-            res.send('Successfully logged out');
+            req.logout();
         }
+
+        res.redirect('/');
     });
-});
 
-AuthRouter.get('/state', function(req, res) {
+    AuthRouter.get('/state', function(req, res) {
 
-    var tokens = req.user.getConnection(req.serviceConnector);
+        res.send(req.user || "not connected");
+    });
 
-    if(!tokens) {
-        Errors.sendError(res, "AUTH_NOT_CONNECTED");
-    }
-    else {
-        res.send(tokens);
-    }
-});
+    return AuthRouter;
+}
 
-AuthRouter.get('/me', function(req, res) {
-
-    var infos = req.user.getUserInfo(req.serviceConnector);
-
-    if(!infos) {
-        Errors.sendError(res, "AUTH_NOT_CONNECTED");
-    }
-    else {
-        res.send(infos);
-    }
-});
-
-module.exports = AuthRouter;
+module.exports = AuthRouterFn;

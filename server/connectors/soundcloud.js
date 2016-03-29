@@ -18,7 +18,9 @@ class SoundCloud extends Connector {
     get config () {
 
         return {
-            api_url: 'https://api.soundcloud.com/'
+            id: 'soundcloud',
+            api_url: 'https://api.soundcloud.com/',
+            passportId: 'soundcloud'
         };
     }
 

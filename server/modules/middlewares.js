@@ -1,36 +1,9 @@
 var _ = require('lodash');
 
-var Users = require('../models/users');
 var Connectors = require('../connectors/connectors');
 var Errors = require('../modules/errors');
 
 var Middlewares = {};
-
-// Authorization middleware
-Middlewares.auth = function() {
-    var users = new Users();
-
-    var COOKIE_NAME = "songBridge_authid";
-
-    return function (req, res, next) {
-
-        var authId = req.cookies[COOKIE_NAME] || req.headers[COOKIE_NAME];
-        var user = authId !== undefined ? users.getById(authId) : null;
-
-        if (user) {
-            req.user = user;
-        }
-        else {
-            user = users.create();
-            //user = users.createDebug();
-
-            req.user = user;
-            res.cookie(COOKIE_NAME, user._id);
-        }
-
-        next();
-    }
-};
 
 // Connector getting middleware
 Middlewares.connectors = function() {

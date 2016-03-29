@@ -12,16 +12,16 @@ var platformParams = {
 };
 class Deezer extends Connector {
 
-    get infos () {
+    get config () {
 
         return {
-            name: 'Deezer',
-            serviceId: 'deezer',
+            id: 'soundcloud',
             oauthOptions: {
                 authorizeUrl: 'https://connect.deezer.com/oauth/auth.php',
                 tokenUrl: 'https://connect.deezer.com/oauth/access_token.php',
                 scope: 'basic_access,email'
-            }
+            },
+            passportId: 'deezer'
         };
     }
 
@@ -34,14 +34,14 @@ class Deezer extends Connector {
     getLoginPageParams_s(state) {
         return {
             app_id: platformParams.client_id,
-            perms: this.infos.oauthOptions.scope,
+            perms: this.config.oauthOptions.scope,
             redirect_uri: this.redirectUrl,
             state: state
         };
     }
 
     getTokenRequest_s(code) {
-        var url = this.infos.oauthOptions.tokenUrl;
+        var url = this.config.oauthOptions.tokenUrl;
         url += '?';
         url += querystring.stringify({
             app_id: platformParams.client_id,

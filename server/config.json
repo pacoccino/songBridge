@@ -15,11 +15,15 @@
   },
 
   "connections": {
-    "mongoUrl": ""
+    "mongoUrl": "mongodb://127.0.0.1:15011/songbridge",
+    "redis": {
+      "host": "127.0.0.1",
+      "port": 15021
+    }
   },
 
   "etcd": {
-    "host": "192.168.1.23",
+    "host": null,
     "port": 4001
   }
 }

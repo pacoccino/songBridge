@@ -18,5 +18,6 @@ Application.ready.then(function() {
     Logger.info('Listening on '+ app.get('port'));
     app.listen(app.get('port'));
 });
+
 Application.init();
 

@@ -8,6 +8,7 @@ const passport = require('passport');
 const MongoStore = require('connect-mongo')(session);
 const Connectors = require('./../connectors/connectors');
 
+var AuthRouter = require('./auth');
 var SandRouter = require('./sand');
 var SCRouter = require('./soundcloud');
 var Authorization = require('../modules/authorization');
@@ -20,7 +21,8 @@ function ApiRouterFn(connections) {
 
     ApiRouter.use(session(
         {
-            secret: 'keyboard cat',
+            name: 'songbridge.sid',
+            secret: 'sb-secret-key',
             resave: false,
             saveUninitialized: false,
             store: new MongoStore(
@@ -30,16 +32,16 @@ function ApiRouterFn(connections) {
 
     ApiRouter.use(passport.initialize());
     ApiRouter.use(passport.session());
-    ApiRouter.use(Authorization.noSessionAuth(connections));
+    //ApiRouter.use(Authorization.noSessionAuth(connections));
 
     Authorization.bindOAuth(passport, connections);
 
     ApiRouter.get('/', function(req,res) {res.send('api ok')});
 
-    //ApiRouter.use('/auth', AuthRouter);
+    ApiRouter.use('/auth', AuthRouter(passport));
     //ApiRouter.use('/library', LibRouter);
     ApiRouter.use('/sand', SandRouter);
-    ApiRouter.use('/soundcloud', SCRouter(connections));
+    ApiRouter.use('/soundcloud', SCRouter(connections, passport));
 
     ApiRouter.get('/connectors', function(req, res) {
 
