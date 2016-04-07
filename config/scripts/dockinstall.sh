@@ -12,3 +12,5 @@ docker rm sb-redis
 docker run --name sb-redis -d \
         -p 172.17.0.1:15021:6379 \
         redis:latest
+
+docker run --name etcd -d -p 2379:2379 quay.io/coreos/etcd:v2.3.1

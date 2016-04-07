@@ -3,4 +3,5 @@ Vagrant.configure("2") do |config|
   config.vm.provision :shell, path: "config/scripts/vagrantinstall.sh"
   config.vm.network :forwarded_port, guest: 27017, host: 15011
   config.vm.network :forwarded_port, guest: 6379, host: 15021
+  config.vm.network :forwarded_port, guest: 2379, host: 15031
 end
