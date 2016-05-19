@@ -11,7 +11,7 @@ class RamCache {
 
         if(cached) {
             var now = Date.now();
-            if(cached.expiration < now) {
+            if(cached.expiration && cached.expiration < now) {
                 return callback(null, cached.data);
             }
             else {
